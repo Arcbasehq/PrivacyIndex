@@ -17,7 +17,6 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/fetch-logos.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
