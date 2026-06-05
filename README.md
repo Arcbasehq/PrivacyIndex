@@ -1,46 +1,85 @@
-# Astro Starter Kit: Basics
+# Privacy Index
 
-```sh
-pnpm create astro@latest -- --template basics
-```
+Privacy Index is a structured reference for privacy-focused software across categories like VPNs, browsers, email providers, messaging apps, DNS resolvers, operating systems, and search engines.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+It exists to reduce noise and inconsistency in privacy tool recommendations by applying a consistent evaluation framework across all entries.
 
-## 🚀 Project Structure
+---
 
-Inside of your Astro project, you'll see the following folders and files:
+## Purpose
 
-```text
-/
-├── public/
-│   └── logo.png
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+Most privacy recommendation lists suffer from:
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+- marketing bias or affiliate incentives
+- lack of consistent evaluation criteria
+- subjective or fear-driven rankings
 
-## 🧞 Commands
+Privacy Index addresses this by using a transparent, repeatable methodology based on verifiable properties.
 
-All commands are run from the root of the project, from a terminal:
+---
 
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm install`         | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+## Evaluation Methodology
 
-## 👀 Want to learn more?
+Each tool is assessed using publicly observable and verifiable signals, including:
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Open-source availability
+- Independent security audits (if available)
+- Documented privacy policies and telemetry behavior
+- Encryption and security architecture
+- Network and data handling design
+
+Scores are comparative indicators, not guarantees of security or anonymity.
+
+---
+
+## Categories
+
+The index currently covers:
+
+- VPN Services
+- Web Browsers
+- Email Providers
+- Messaging Apps
+- DNS Resolvers
+- Operating Systems
+- Search Engines
+
+---
+
+## What This Is Not
+
+Privacy Index is not:
+
+- a ranking of “best” tools in absolute terms
+- a guarantee of security or anonymity
+- a replacement for threat model analysis
+- a monetized or affiliate-driven recommendation system
+
+---
+
+## Threat Model Awareness
+
+Different tools are appropriate for different threat models. Users are expected to evaluate tools based on their own requirements rather than relying solely on scores.
+
+---
+
+## Tech Stack
+
+- Astro (static site generation)
+- Content-driven tool registry
+- Custom scoring and categorization system
+
+---
+
+## Design Philosophy
+
+- Transparency over marketing
+- Consistency over popularity
+- Verifiable properties over community sentiment
+- Minimal bias in presentation
+
+---
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 (GPLv3).
