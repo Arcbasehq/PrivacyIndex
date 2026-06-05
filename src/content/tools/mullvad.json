@@ -1,0 +1,37 @@
+{
+  "slug": "mullvad",
+  "name": "Mullvad VPN",
+  "category": "vpn",
+  "website": "https://mullvad.net",
+  "pricing": {
+    "model": "paid",
+    "details": "€5/month flat rate. No subscription tiers. Accepts cash, cryptocurrency, and card."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": true,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 9.5,
+    "security": 9.0,
+    "usability": 7.5
+  },
+  "tags": [
+    "wireguard",
+    "openvpn",
+    "no-logs",
+    "anonymous-payment",
+    "open-source",
+    "audited",
+    "diskless-servers"
+  ],
+  "lastReviewed": "2025-11-01",
+  "description": "Account-free VPN service with flat-rate pricing and a consistent record of no-logging compliance. Accounts are identified by randomly generated numbers; no email address or personal information is required at signup.",
+  "rationale": "Mullvad accepts anonymous payment methods including cash and Monero. Client applications are open source and have undergone multiple independent audits verifying the no-logs claim. The flat pricing model eliminates upsell pressure and simplifies the trust relationship. RAM-only server infrastructure has been independently confirmed."
+}

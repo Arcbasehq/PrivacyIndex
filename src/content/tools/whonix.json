@@ -1,0 +1,36 @@
+{
+  "slug": "whonix",
+  "name": "Whonix",
+  "category": "os",
+  "website": "https://www.whonix.org",
+  "pricing": {
+    "model": "free",
+    "details": "Free and open source. Runs as two virtual machines inside a hypervisor (e.g., VirtualBox, KVM)."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": false,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 9.5,
+    "security": 9.0,
+    "usability": 6.0
+  },
+  "tags": [
+    "tor-routing",
+    "virtualized",
+    "open-source",
+    "stream-isolation",
+    "debian-based",
+    "workstation-gateway"
+  ],
+  "lastReviewed": "2025-09-01",
+  "description": "Two-VM architecture separating a Tor gateway (Whonix-Gateway) from a workstation (Whonix-Workstation). All workstation traffic is forced through the gateway, preventing IP leaks even under software compromise.",
+  "rationale": "Whonix's two-VM design means that even if malware compromises the Workstation VM, it cannot discover the user's real IP address — the gateway enforces Tor routing at the network level and the Workstation has no direct network access. Persistent state is retained between sessions, making it more practical than Tails for ongoing use cases. Requires a hypervisor and sufficient RAM (4GB+). Usability is limited compared to a standard desktop OS. Can be combined with Qubes OS for additional compartmentalization."
+}

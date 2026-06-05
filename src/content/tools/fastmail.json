@@ -1,0 +1,36 @@
+{
+  "slug": "fastmail",
+  "name": "Fastmail",
+  "category": "email",
+  "website": "https://www.fastmail.com",
+  "pricing": {
+    "model": "paid",
+    "details": "Individual plans from $3/month (Basic) to $9/month (Professional). No free tier."
+  },
+  "attributes": {
+    "openSource": false,
+    "auditedThirdParty": false,
+    "noLogsPolicy": false,
+    "anonymousSignup": false,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 6.0,
+    "security": 7.5,
+    "usability": 9.0
+  },
+  "tags": [
+    "no-ads",
+    "imap",
+    "carddav",
+    "caldav",
+    "jmap",
+    "australian-jurisdiction"
+  ],
+  "lastReviewed": "2025-09-01",
+  "description": "Commercial email hosting provider with strong usability, JMAP support, and no advertising. Based in Australia, subject to Five Eyes intelligence sharing.",
+  "rationale": "Fastmail offers a well-designed, reliable email service with no advertising-based business model. However, it does not provide end-to-end encryption, is not open source, and operates under Australian jurisdiction (part of the Five Eyes alliance), which limits its utility for users with serious privacy requirements. Recommended primarily for users seeking an ad-free Gmail alternative with good usability, not for high-risk use cases."
+}

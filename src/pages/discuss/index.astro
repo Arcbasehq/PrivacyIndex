@@ -1,0 +1,340 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getThreads, initSchema } from '../../lib/db';
+
+await initSchema();
+const threads = await getThreads();
+
+const auth = Astro.locals.auth();
+const isLoggedIn = !!auth.userId;
+
+const categories: Record<string, { label: string; color: string; icon: string }> = {
+  general:      { label: 'General',       color: '#8b929e', icon: 'fa-comments' },
+  vpn:          { label: 'VPN',           color: '#2dd4bf', icon: 'fa-shield-halved' },
+  browsers:     { label: 'Browsers',      color: '#60a5fa', icon: 'fa-globe' },
+  email:        { label: 'Email',         color: '#f87171', icon: 'fa-envelope' },
+  messaging:    { label: 'Messaging',     color: '#34d399', icon: 'fa-message' },
+  os:           { label: 'OS & Devices',  color: '#94a3b8', icon: 'fa-laptop-code' },
+  threat_model: { label: 'Threat Model',  color: '#a78bfa', icon: 'fa-user-shield' },
+  tools:        { label: 'Tools',         color: '#fb923c', icon: 'fa-screwdriver-wrench' },
+};
+
+function timeAgo(date: string) {
+  const s = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
+  if (s < 60) return 'just now';
+  if (s < 3600) return `${Math.floor(s/60)}m ago`;
+  if (s < 86400) return `${Math.floor(s/3600)}h ago`;
+  return `${Math.floor(s/86400)}d ago`;
+}
+---
+
+<Layout title="Discuss — Privacy Index">
+  <div class="main-content">
+
+    <div class="discuss-header">
+      <div>
+        <h1 class="discuss-header__title">
+          <i class="fa-solid fa-comments" aria-hidden="true"></i>
+          Discuss
+        </h1>
+        <p class="discuss-header__sub">Privacy tools, threat models, and everything in between.</p>
+      </div>
+      {isLoggedIn ? (
+        <a href="/discuss/new" class="discuss-new-btn">
+          <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+          New thread
+        </a>
+      ) : (
+        <a href="/sign-in" class="discuss-new-btn discuss-new-btn--ghost">
+          <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>
+          Sign in to post
+        </a>
+      )}
+    </div>
+
+    <!-- Category filter pills -->
+    <div class="discuss-cats">
+      <button class="discuss-cat discuss-cat--active" data-cat="all">All</button>
+      {Object.entries(categories).map(([key, cat]) => (
+        <button class="discuss-cat" data-cat={key} style={`--cat: ${cat.color}`}>
+          <i class={`fa-solid ${cat.icon}`} aria-hidden="true"></i>
+          {cat.label}
+        </button>
+      ))}
+    </div>
+
+    <!-- Thread list -->
+    <div class="discuss-list" id="discuss-list">
+      {threads.length === 0 ? (
+        <div class="discuss-empty">
+          <i class="fa-solid fa-seedling"></i>
+          <p>No threads yet. Start the conversation.</p>
+          {isLoggedIn && <a href="/discuss/new">Create first thread →</a>}
+        </div>
+      ) : threads.map((t: any) => {
+        const cat = categories[t.category] ?? categories.general;
+        return (
+          <div class="discuss-row-wrap" data-cat={t.category}>
+        <a href={`/discuss/${t.slug}`} class="discuss-row" data-cat={t.category}>
+            {t.pinned && (
+              <span class="discuss-row__pin" title="Pinned">
+                <i class="fa-solid fa-thumbtack"></i>
+              </span>
+            )}
+            <div class="discuss-row__cat" style={`color: ${cat.color}`}>
+              <i class={`fa-solid ${cat.icon}`} aria-hidden="true"></i>
+            </div>
+            <div class="discuss-row__main">
+              <div class="discuss-row__title">{t.title}</div>
+              <div class="discuss-row__meta">
+                <span>{t.author_name}</span>
+                <span class="discuss-row__dot">·</span>
+                <span>{timeAgo(t.created_at)}</span>
+                <span class="discuss-row__dot">·</span>
+                <span class="discuss-cat-pill" style={`--cat: ${cat.color}`}>{cat.label}</span>
+              </div>
+            </div>
+            <div class="discuss-row__replies">
+              <i class="fa-solid fa-reply" aria-hidden="true"></i>
+              {t.reply_count}
+            </div>
+          </a>
+          {isLoggedIn && (
+            <button
+              class="discuss-row__delete"
+              data-thread-id={t.id}
+              data-author-id={t.author_id}
+              title="Delete thread"
+              style="display:none;"
+            >
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          )}
+        </div>
+        );
+      })}
+    </div>
+
+  </div>
+</Layout>
+
+<script>
+  // Show delete buttons for own threads (after Clerk loads)
+  window.addEventListener('load', () => {
+    const poll = setInterval(() => {
+      const w = window as any;
+      if (w.Clerk?.loaded) {
+        clearInterval(poll);
+        const userId = w.Clerk.user?.id;
+        if (!userId) return;
+        document.querySelectorAll<HTMLButtonElement>('.discuss-row__delete').forEach(btn => {
+          if (btn.dataset.authorId === userId) {
+            btn.style.display = '';
+            btn.addEventListener('click', async () => {
+              if (!confirm('Delete this thread and all replies?')) return;
+              const res = await fetch(`/api/discuss/thread/${btn.dataset.threadId}`, { method: 'DELETE' });
+              if (res.ok) btn.closest('.discuss-row-wrap')?.remove();
+              else alert('Failed to delete');
+            });
+          }
+        });
+      }
+    }, 50);
+    setTimeout(() => clearInterval(poll), 5000);
+  });
+
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.discuss-cat');
+  const rows = document.querySelectorAll<HTMLElement>('.discuss-row-wrap');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('discuss-cat--active'));
+      btn.classList.add('discuss-cat--active');
+      const cat = btn.dataset.cat;
+      rows.forEach(row => {
+        row.style.display = (cat === 'all' || row.dataset.cat === cat) ? '' : 'none';
+      });
+    });
+  });
+</script>
+
+<style>
+  .discuss-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--clr-border);
+  }
+
+  .discuss-header__title {
+    font-size: 1.375rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--clr-text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+  .discuss-header__title i { color: var(--clr-muted); font-size: 1.1rem; }
+  .discuss-header__sub { font-size: 0.8125rem; color: var(--clr-muted); }
+
+  .discuss-new-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    background: #5c6bc0;
+    color: #fff;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.1s;
+  }
+  .discuss-new-btn:hover { background: #4a59b0; color: #fff; }
+  .discuss-new-btn--ghost {
+    background: var(--clr-surface);
+    color: var(--clr-text-secondary);
+    border: 1px solid var(--clr-border-strong);
+  }
+  .discuss-new-btn--ghost:hover { background: var(--clr-surface-alt); }
+
+  .discuss-cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .discuss-cat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.25rem 0.625rem;
+    border-radius: 999px;
+    border: 1px solid var(--clr-border);
+    background: var(--clr-surface);
+    color: var(--clr-muted);
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+  .discuss-cat i { color: var(--cat, var(--clr-muted)); }
+  .discuss-cat:hover { border-color: var(--clr-border-strong); color: var(--clr-text-secondary); }
+  .discuss-cat--active {
+    background: var(--clr-surface-alt);
+    border-color: var(--clr-border-strong);
+    color: var(--clr-text);
+  }
+
+  .discuss-list {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .discuss-row {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--clr-border);
+    position: relative;
+    transition: background 0.1s;
+  }
+  .discuss-row:last-child { border-bottom: none; }
+  .discuss-row:hover { background: var(--clr-surface-alt); }
+
+  .discuss-row__pin {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    font-size: 0.625rem;
+    color: var(--clr-muted);
+    transform: rotate(45deg);
+  }
+
+  .discuss-row__cat {
+    font-size: 0.875rem;
+    width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .discuss-row__main { flex: 1; min-width: 0; }
+  .discuss-row__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--clr-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.2rem;
+  }
+  .discuss-row__meta {
+    font-size: 0.75rem;
+    color: var(--clr-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex-wrap: wrap;
+  }
+  .discuss-row__dot { opacity: 0.4; }
+
+  .discuss-cat-pill {
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--cat, var(--clr-muted));
+  }
+
+  .discuss-row__replies {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--clr-muted);
+    flex-shrink: 0;
+  }
+  .discuss-row__replies i { font-size: 0.625rem; }
+
+  .discuss-row-wrap {
+    display: flex; align-items: center;
+    border-bottom: 1px solid var(--clr-border);
+    position: relative;
+  }
+  .discuss-row-wrap:last-child { border-bottom: none; }
+  .discuss-row-wrap .discuss-row { border-bottom: none; flex: 1; }
+
+  .discuss-row__delete {
+    flex-shrink: 0; padding: 0 0.75rem;
+    background: none; border: none; cursor: pointer;
+    color: var(--clr-muted); font-size: 0.6875rem;
+    transition: color 0.1s;
+  }
+  .discuss-row__delete:hover { color: #f87171; }
+
+  .discuss-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 3rem 1rem;
+    color: var(--clr-muted);
+    font-size: 0.875rem;
+  }
+  .discuss-empty i { font-size: 1.5rem; margin-bottom: 0.25rem; }
+  .discuss-empty a { color: #818cf8; text-decoration: none; }
+</style>

@@ -1,0 +1,36 @@
+{
+  "slug": "torbrowser",
+  "name": "Tor Browser",
+  "category": "browser",
+  "website": "https://www.torproject.org",
+  "pricing": {
+    "model": "free",
+    "details": "Free and open source. Maintained by the Tor Project, a US non-profit."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": true,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": true,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 9.5,
+    "security": 8.5,
+    "usability": 6.0
+  },
+  "tags": [
+    "tor-network",
+    "onion-routing",
+    "open-source",
+    "fingerprint-resistant",
+    "anonymity-set",
+    "hardened"
+  ],
+  "lastReviewed": "2025-10-01",
+  "description": "Firefox-based browser configured to route all traffic through the Tor anonymity network. Maximizes anonymity by standardizing browser fingerprint across all users.",
+  "rationale": "Tor Browser provides the strongest available anonymity for web browsing by routing traffic through three relay nodes, masking the user's IP address from both destination sites and network observers. All users share a standardized fingerprint, eliminating browser-based tracking. Performance is significantly reduced due to multi-hop routing. Not suitable as a daily driver for bandwidth-intensive activity. Security level can be set to 'Safest' to disable JavaScript for high-risk contexts."
+}

@@ -1,0 +1,34 @@
+{
+  "slug": "startpage",
+  "name": "Startpage",
+  "category": "search",
+  "website": "https://www.startpage.com",
+  "pricing": {
+    "model": "free",
+    "details": "Free, ad-supported. No premium tier."
+  },
+  "attributes": {
+    "openSource": false,
+    "auditedThirdParty": false,
+    "noLogsPolicy": false,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 7.5,
+    "security": 7.5,
+    "usability": 8.5
+  },
+  "tags": [
+    "google-proxy",
+    "no-tracking",
+    "anonymous-view",
+    "netherlands-jurisdiction"
+  ],
+  "lastReviewed": "2025-09-01",
+  "description": "Privacy-focused search engine that proxies Google results, providing Google's search quality without Google's tracking. Based in the Netherlands under GDPR.",
+  "rationale": "Startpage offers Google-quality search results without Google's tracking infrastructure. It acts as a proxy, forwarding queries to Google without identifying the user. The 'Anonymous View' feature allows clicking through to results via Startpage's proxy. A 2019 investment by an advertising company (System1) raised concerns but the company maintains that no user data is shared with System1. GDPR jurisdiction provides enforceable data handling obligations. Results quality matches Google, making this the most practical option for users sensitive to search quality degradation."
+}

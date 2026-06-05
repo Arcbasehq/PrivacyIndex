@@ -1,0 +1,39 @@
+{
+  "slug": "grapheneos",
+  "name": "GrapheneOS",
+  "category": "os",
+  "website": "https://grapheneos.org",
+  "pricing": {
+    "model": "free",
+    "details": "Free and open source Android-based operating system focused on privacy and security hardening."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": false,
+    "anonymousSignup": false,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": false
+  },
+  "scores": {
+    "privacy": 9.5,
+    "security": 9.8,
+    "usability": 7.5
+  },
+  "tags": [
+    "android",
+    "hardened-android",
+    "selinux",
+    "sandboxing",
+    "verified-boot",
+    "memory-safety",
+    "privacy",
+    "security-focused",
+    "mobile-os"
+  ],
+  "lastReviewed": "2025-11-01",
+  "description": "Hardened Android-based operating system with a strong focus on security and privacy, featuring aggressive app sandboxing, hardened memory allocator, verified boot, and reduced attack surface compared to standard Android builds.",
+  "rationale": "GrapheneOS is a security-focused Android distribution designed to significantly reduce attack surface while maintaining compatibility with the Android app ecosystem. It strengthens app isolation, hardens memory handling, and enforces verified boot. Unlike general-purpose Linux distributions, it is not a desktop OS and is not intended for traditional workstation use. It does not provide anonymity features or network routing; instead it focuses on device-level security hardening. It is best suited for users who want a secure daily-driver mobile OS without relying on OEM Android builds."
+}

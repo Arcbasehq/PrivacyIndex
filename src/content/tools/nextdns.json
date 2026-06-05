@@ -1,0 +1,36 @@
+{
+  "slug": "nextdns",
+  "name": "NextDNS",
+  "category": "dns",
+  "website": "https://nextdns.io",
+  "pricing": {
+    "model": "freemium",
+    "details": "Free tier: 300,000 queries/month. Pro plan $19.90/year for unlimited queries."
+  },
+  "attributes": {
+    "openSource": false,
+    "auditedThirdParty": false,
+    "noLogsPolicy": false,
+    "anonymousSignup": false,
+    "e2eEncrypted": true,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 7.5,
+    "security": 8.5,
+    "usability": 8.5
+  },
+  "tags": [
+    "dns-over-https",
+    "dns-over-tls",
+    "dns-over-quic",
+    "blocklists",
+    "analytics",
+    "configurable"
+  ],
+  "lastReviewed": "2025-11-01",
+  "description": "Configurable encrypted DNS resolver with customizable blocklists, analytics dashboard, and per-device profiles. Logs queries by default with a configurable retention window.",
+  "rationale": "NextDNS provides granular DNS-level filtering with a detailed analytics dashboard. It supports DNS-over-HTTPS, DNS-over-TLS, and DNS-over-QUIC. Query logging is enabled by default and retained for a configurable period — this is a significant privacy consideration. The service is not open source. For users who want DNS-level content filtering with visibility into DNS queries, NextDNS is the most configurable commercial option. Users with strict privacy requirements should use Quad9 or a self-hosted resolver instead."
+}

@@ -1,0 +1,35 @@
+{
+  "slug": "firefox",
+  "name": "Firefox",
+  "category": "browser",
+  "website": "https://www.mozilla.org/firefox",
+  "pricing": {
+    "model": "free",
+    "details": "Free and open source. Optional paid Firefox Sync with Mozilla account."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": false,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 6.5,
+    "security": 8.0,
+    "usability": 9.0
+  },
+  "tags": [
+    "open-source",
+    "extensible",
+    "telemetry-optional",
+    "fingerprint-protection",
+    "cross-platform"
+  ],
+  "lastReviewed": "2025-11-01",
+  "description": "General-purpose browser from Mozilla with strong extension ecosystem. Requires configuration hardening to reach meaningful privacy defaults. Ships with telemetry enabled by default.",
+  "rationale": "Firefox's primary value is its extension support (uBlock Origin, etc.) and open-source codebase. Default telemetry settings and integration with Mozilla services (Pocket, Suggest) reduce privacy scores out-of-the-box. With appropriate configuration (arkenfox user.js or equivalent), Firefox becomes a competitive privacy browser. Maintained by a non-profit with a public interest mission."
+}

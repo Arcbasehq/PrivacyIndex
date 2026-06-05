@@ -1,0 +1,37 @@
+{
+  "slug": "tails",
+  "name": "Tails",
+  "category": "os",
+  "website": "https://tails.boum.org",
+  "pricing": {
+    "model": "free",
+    "details": "Free and open source. Runs from a USB drive; does not require installation."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": true,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": false,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 9.5,
+    "security": 9.5,
+    "usability": 6.5
+  },
+  "tags": [
+    "amnesic",
+    "tor-routing",
+    "live-os",
+    "open-source",
+    "audited",
+    "debian-based",
+    "air-gapped"
+  ],
+  "lastReviewed": "2025-10-01",
+  "description": "Amnesic live operating system that routes all traffic through Tor and leaves no trace on the host computer. Runs from USB. All state is discarded on shutdown unless explicitly persisted.",
+  "rationale": "Tails provides the strongest anonymity properties of any general-purpose OS in this index. Amnesic design means no forensic evidence persists after use. All internet traffic is forced through Tor. No installation required — runs from USB on any x86-64 machine. Persistent storage can be encrypted and enabled optionally. Best suited for high-risk use cases requiring strong anonymity and deniability. Not practical as a daily-use operating system due to session reset and application availability constraints."
+}

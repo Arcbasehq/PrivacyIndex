@@ -1,0 +1,37 @@
+{
+  "slug": "briar",
+  "name": "Briar",
+  "category": "messaging",
+  "website": "https://briarproject.org",
+  "pricing": {
+    "model": "free",
+    "details": "Free and open source. Android only."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": true,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": true,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": false
+  },
+  "scores": {
+    "privacy": 9.5,
+    "security": 9.0,
+    "usability": 5.5
+  },
+  "tags": [
+    "tor-network",
+    "p2p",
+    "serverless",
+    "open-source",
+    "audited",
+    "bluetooth-wifi-sync",
+    "android-only"
+  ],
+  "lastReviewed": "2025-08-01",
+  "description": "Peer-to-peer messaging application that routes messages through Tor. Has no central server; messages sync directly between devices or via local network (Bluetooth/Wi-Fi) when internet is unavailable.",
+  "rationale": "Briar has the strongest anonymity properties of any messaging application in this index. No server infrastructure means no central point of compromise or subpoena. Tor routing masks IP addresses. Bluetooth and Wi-Fi sync modes allow communication without internet access. Limited to Android, with no iOS or desktop client, which significantly limits its applicability as a daily communication tool. Best suited for high-risk contexts where metadata concealment is critical."
+}

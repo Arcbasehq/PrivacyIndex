@@ -1,0 +1,35 @@
+{
+  "slug": "session",
+  "name": "Session",
+  "category": "messaging",
+  "website": "https://getsession.org",
+  "pricing": {
+    "model": "free",
+    "details": "Free and open source. Funded by the OPTF (Oxen Privacy Tech Foundation)."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": true,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 8.5,
+    "security": 8.0,
+    "usability": 7.5
+  },
+  "tags": [
+    "decentralized",
+    "no-phone-number",
+    "open-source",
+    "onion-routing",
+    "end-to-end-encryption"
+  ],
+  "lastReviewed": "2025-09-01",
+  "description": "Decentralized messaging application requiring no phone number or email for account creation. Uses a randomly generated Session ID. Routes messages through a decentralized onion routing network.",
+  "rationale": "Session's anonymous account creation model — no phone number, no email — removes a significant metadata risk present in Signal. The decentralized routing network eliminates central server dependencies. Forward secrecy properties are weaker than the Signal Protocol, and the application has not received a published comprehensive security audit. Usability is solid for a non-phone-number-based messenger."
+}

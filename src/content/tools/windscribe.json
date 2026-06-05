@@ -1,0 +1,36 @@
+{
+  "slug": "windscribe",
+  "name": "Windscribe",
+  "category": "vpn",
+  "website": "https://windscribe.com",
+  "pricing": {
+    "model": "freemium",
+    "details": "Free tier includes 10GB/month. Pro plan $9/month or $69/year. Custom plan available per server location."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 7.5,
+    "security": 7.5,
+    "usability": 8.5
+  },
+  "tags": [
+    "wireguard",
+    "openvpn",
+    "ikev2",
+    "no-logs",
+    "open-source",
+    "stealth-protocol"
+  ],
+  "lastReviewed": "2025-09-01",
+  "description": "Canadian VPN provider offering a generous free tier, open-source clients, and a self-described \"firewall\" feature for blocking connections outside the VPN tunnel.",
+  "rationale": "Windscribe's free tier is among the most capable available, requiring only an email address or none at all for limited functionality. Client applications are open source. The service has not undergone a published independent audit, which is a meaningful gap relative to top-tier providers. Canadian jurisdiction is less favorable than Swiss or Gibraltarian incorporation for some use cases."
+}

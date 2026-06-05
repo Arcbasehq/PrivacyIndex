@@ -1,0 +1,36 @@
+{
+  "slug": "dnscrypt",
+  "name": "dnscrypt-proxy",
+  "category": "dns",
+  "website": "https://dnscrypt.info",
+  "pricing": {
+    "model": "open-source",
+    "details": "Free and open source. Self-hosted. Works with any DNSCrypt or DoH-compatible resolver."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": true,
+    "selfHostable": true,
+    "mobileSupport": false,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 8.5,
+    "security": 8.5,
+    "usability": 5.0
+  },
+  "tags": [
+    "open-source",
+    "self-hosted",
+    "dnscrypt-protocol",
+    "dns-over-https",
+    "anonymized-dns",
+    "local-proxy"
+  ],
+  "lastReviewed": "2025-08-01",
+  "description": "Local DNS proxy that encrypts DNS traffic and forwards it to a configurable upstream resolver. Supports DNSCrypt, DoH, and Anonymized DNSCrypt. Requires command-line configuration.",
+  "rationale": "dnscrypt-proxy provides maximum flexibility and control over DNS encryption. The 'Anonymized DNSCrypt' mode routes queries through a relay, preventing the upstream resolver from seeing the client's IP address — a stronger privacy property than standard DoH/DoT. Configuration requires editing TOML files, which has a high usability barrier. Best suited for technically experienced users who want full DNS stack control without relying on a commercial provider."
+}

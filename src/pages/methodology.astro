@@ -1,0 +1,914 @@
+---
+export const prerender = true;
+
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Methodology"
+  description="How Privacy Index evaluates and scores privacy and security tools. Scoring criteria, review process, and editorial standards."
+>
+  <div class="main-content">
+    <div class="breadcrumb">
+      <a href="/">Privacy Index</a>
+      <span class="breadcrumb__sep">/</span>
+      <span>Methodology</span>
+    </div>
+
+    <div class="page-header">
+      <div class="page-header__eyebrow">
+        <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+        Documentation
+      </div>
+      <h1 class="page-header__title">Scoring Methodology</h1>
+      <p class="page-header__desc">
+        How tools are selected, evaluated, and scored. All criteria are based on
+        publicly verifiable information — source code, published audits,
+        disclosed policies, and documented legal history.
+      </p>
+    </div>
+
+    <div class="method-layout">
+      <!-- TOC -->
+      <nav class="method-toc" aria-label="Page contents">
+        <div class="method-toc__heading">On this page</div>
+        <a href="#overview" class="method-toc__link">Overview</a>
+        <a href="#scores" class="method-toc__link">Score axes</a>
+        <a href="#privacy" class="method-toc__link indent">Privacy score</a>
+        <a href="#security" class="method-toc__link indent">Security score</a>
+        <a href="#usability" class="method-toc__link indent">Usability score</a>
+        <a href="#attributes" class="method-toc__link">Trust attributes</a>
+        <a href="#selection" class="method-toc__link">Tool selection</a>
+        <a href="#exclusions" class="method-toc__link">Exclusion criteria</a>
+        <a href="#review" class="method-toc__link">Review cadence</a>
+        <a href="#standards" class="method-toc__link">Editorial standards</a>
+      </nav>
+
+      <!-- Content -->
+      <div class="method-body">
+        <!-- Overview -->
+        <section class="method-section" id="overview">
+          <h2 class="method-section__title">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            Overview
+          </h2>
+          <p>
+            Privacy Index evaluates tools across three independent dimensions: <strong
+              >Privacy</strong
+            >,
+            <strong>Security</strong>, and <strong>Usability</strong>. These are
+            not averaged into a composite score. A high privacy score and a low
+            usability score are both meaningful signals that serve different
+            user needs — combining them would obscure that information.
+          </p>
+          <p>
+            Scores are assigned by editorial review, not algorithmic
+            computation. Every score is anchored to a specific set of criteria
+            documented below. If a criterion cannot be verified from public
+            information, it is treated as unknown and does not count positively
+            toward the score.
+          </p>
+          <div class="method-callout method-callout--info">
+            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+            <span>
+              This index does not accept payment for placement, maintain
+              affiliate relationships, or receive compensation from any listed
+              tool or organization.
+            </span>
+          </div>
+        </section>
+
+        <hr class="method-hr" />
+
+        <!-- Score axes -->
+        <section class="method-section" id="scores">
+          <h2 class="method-section__title">
+            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+            Score axes
+          </h2>
+          <p>
+            All scores use a 0–10 scale. A score of 10 is theoretical maximum —
+            no tool is expected to achieve it. The scale is designed to
+            meaningfully differentiate tools within a category, not to compare
+            across categories.
+          </p>
+
+          <div class="method-score-scale">
+            <div class="method-score-scale__item score--high">8.0 – 10.0</div>
+            <div class="method-score-scale__label">
+              Strong — recommended for most threat models in this category
+            </div>
+            <div class="method-score-scale__item score--mid">6.0 – 7.9</div>
+            <div class="method-score-scale__label">
+              Adequate — notable limitations or trade-offs present
+            </div>
+            <div class="method-score-scale__item score--low">0 – 5.9</div>
+            <div class="method-score-scale__label">
+              Limited — significant concerns; listed for completeness
+            </div>
+          </div>
+        </section>
+
+        <hr class="method-hr" />
+
+        <!-- Privacy -->
+        <section class="method-section" id="privacy">
+          <h2 class="method-section__title">
+            <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+            Privacy score
+          </h2>
+          <p>
+            Measures how little data the tool collects, retains, or exposes —
+            both by design and by legal obligation. A higher score indicates
+            less exposure.
+          </p>
+
+          <table class="method-table">
+            <thead>
+              <tr>
+                <th>Criterion</th>
+                <th>Weight</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>No-logs policy (verifiable)</td>
+                <td
+                  ><span class="method-weight method-weight--high">High</span
+                  ></td
+                >
+                <td
+                  >Policy must be backed by audit result or demonstrated legal
+                  response, not self-assertion alone</td
+                >
+              </tr>
+              <tr>
+                <td>Account / signup requirements</td>
+                <td
+                  ><span class="method-weight method-weight--high">High</span
+                  ></td
+                >
+                <td
+                  >Tools requiring no email, phone, or identity reduce metadata
+                  exposure at signup</td
+                >
+              </tr>
+              <tr>
+                <td>Jurisdiction</td>
+                <td
+                  ><span class="method-weight method-weight--mid">Medium</span
+                  ></td
+                >
+                <td
+                  >Legal framework governing data requests; Five Eyes membership
+                  penalizes score relative to neutral jurisdictions</td
+                >
+              </tr>
+              <tr>
+                <td>Metadata handling</td>
+                <td
+                  ><span class="method-weight method-weight--mid">Medium</span
+                  ></td
+                >
+                <td
+                  >IP address logging, connection timestamps, session
+                  identifiers retained post-use</td
+                >
+              </tr>
+              <tr>
+                <td>Data sharing with third parties</td>
+                <td
+                  ><span class="method-weight method-weight--mid">Medium</span
+                  ></td
+                >
+                <td
+                  >Analytics SDKs, advertising networks, or parent-company data
+                  access</td
+                >
+              </tr>
+              <tr>
+                <td>Business model alignment</td>
+                <td
+                  ><span class="method-weight method-weight--low">Low</span></td
+                >
+                <td
+                  >Advertising-funded tools score lower; non-profit or
+                  subscription models score higher</td
+                >
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <hr class="method-hr" />
+
+        <!-- Security -->
+        <section class="method-section" id="security">
+          <h2 class="method-section__title">
+            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+            Security score
+          </h2>
+          <p>
+            Measures the strength and verifiability of the tool's security
+            implementation. A higher score indicates stronger technical
+            guarantees and greater independent verification.
+          </p>
+
+          <table class="method-table">
+            <thead>
+              <tr>
+                <th>Criterion</th>
+                <th>Weight</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Independent security audit</td>
+                <td
+                  ><span class="method-weight method-weight--high">High</span
+                  ></td
+                >
+                <td
+                  >Published report from a recognized security firm; recency
+                  matters (audits older than 3 years penalized)</td
+                >
+              </tr>
+              <tr>
+                <td>Open-source client code</td>
+                <td
+                  ><span class="method-weight method-weight--high">High</span
+                  ></td
+                >
+                <td
+                  >Client source must be publicly available and buildable;
+                  server-side only OSS is credited partially</td
+                >
+              </tr>
+              <tr>
+                <td>Encryption protocol strength</td>
+                <td
+                  ><span class="method-weight method-weight--high">High</span
+                  ></td
+                >
+                <td
+                  >Forward secrecy, algorithm choices (ChaCha20, AES-256-GCM,
+                  X25519), post-quantum resistance where applicable</td
+                >
+              </tr>
+              <tr>
+                <td>Vulnerability disclosure track record</td>
+                <td
+                  ><span class="method-weight method-weight--mid">Medium</span
+                  ></td
+                >
+                <td
+                  >Responsible disclosure policy, response time to reported
+                  CVEs, public changelogs</td
+                >
+              </tr>
+              <tr>
+                <td>Default security posture</td>
+                <td
+                  ><span class="method-weight method-weight--mid">Medium</span
+                  ></td
+                >
+                <td
+                  >Secure defaults without manual hardening required; kill
+                  switches, DNS leak protection, etc.</td
+                >
+              </tr>
+              <tr>
+                <td>Supply chain risk</td>
+                <td
+                  ><span class="method-weight method-weight--low">Low</span></td
+                >
+                <td
+                  >Reproducible builds, signed releases, dependency audit
+                  history</td
+                >
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <hr class="method-hr" />
+
+        <!-- Usability -->
+        <section class="method-section" id="usability">
+          <h2 class="method-section__title">
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
+            Usability score
+          </h2>
+          <p>
+            Measures how practical the tool is as a daily driver for a
+            non-expert user. This dimension intentionally rewards ease of use —
+            a highly secure tool that most people cannot configure correctly
+            provides less real-world privacy benefit.
+          </p>
+
+          <table class="method-table">
+            <thead>
+              <tr>
+                <th>Criterion</th>
+                <th>Weight</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Platform coverage</td>
+                <td
+                  ><span class="method-weight method-weight--high">High</span
+                  ></td
+                >
+                <td
+                  >Desktop and mobile availability; Linux support noted
+                  separately</td
+                >
+              </tr>
+              <tr>
+                <td>Setup complexity</td>
+                <td
+                  ><span class="method-weight method-weight--high">High</span
+                  ></td
+                >
+                <td
+                  >Steps required from download to functional use;
+                  command-line-only tools score lower</td
+                >
+              </tr>
+              <tr>
+                <td>Performance impact</td>
+                <td
+                  ><span class="method-weight method-weight--mid">Medium</span
+                  ></td
+                >
+                <td
+                  >Latency overhead, throughput reduction, battery impact for
+                  mobile use</td
+                >
+              </tr>
+              <tr>
+                <td>Maintenance burden</td>
+                <td
+                  ><span class="method-weight method-weight--mid">Medium</span
+                  ></td
+                >
+                <td
+                  >Update frequency required, key management complexity,
+                  configuration drift risk</td
+                >
+              </tr>
+              <tr>
+                <td>Interoperability</td>
+                <td
+                  ><span class="method-weight method-weight--low">Low</span></td
+                >
+                <td
+                  >Compatibility with standard protocols; walled-garden tools
+                  score lower</td
+                >
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <hr class="method-hr" />
+
+        <!-- Attributes -->
+        <section class="method-section" id="attributes">
+          <h2 class="method-section__title">
+            <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+            Trust attributes
+          </h2>
+          <p>
+            In addition to scores, each tool is tagged with boolean trust
+            attributes. These are not inputs to the score calculation — they are
+            independently documented properties that allow direct filtering.
+          </p>
+
+          <div class="method-attr-grid">
+            {
+              [
+                {
+                  icon: 'fa-code',
+                  label: 'Open Source',
+                  desc: 'Client application source is publicly available under an OSI-approved license',
+                },
+                {
+                  icon: 'fa-magnifying-glass-chart',
+                  label: 'Audited',
+                  desc: 'A published third-party security audit exists, regardless of findings',
+                },
+                {
+                  icon: 'fa-file-slash',
+                  label: 'No Logs',
+                  desc: 'Operator claims a no-logs policy; noted whether independently verified',
+                },
+                {
+                  icon: 'fa-user-secret',
+                  label: 'Anonymous Signup',
+                  desc: 'Account creation requires no email address, phone number, or identifying information',
+                },
+                {
+                  icon: 'fa-lock',
+                  label: 'E2E Encrypted',
+                  desc: 'Content is encrypted end-to-end; the operator cannot read it at rest or in transit',
+                },
+                {
+                  icon: 'fa-server',
+                  label: 'Self-Hostable',
+                  desc: 'Server-side code is available and documented for self-deployment',
+                },
+              ].map((a) => (
+                <div class="method-attr-card">
+                  <div class="method-attr-card__icon">
+                    <i class={`fa-solid ${a.icon}`} aria-hidden="true" />
+                  </div>
+                  <div>
+                    <div class="method-attr-card__label">{a.label}</div>
+                    <div class="method-attr-card__desc">{a.desc}</div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </section>
+
+        <hr class="method-hr" />
+
+        <!-- Selection -->
+        <section class="method-section" id="selection">
+          <h2 class="method-section__title">
+            <i class="fa-solid fa-filter" aria-hidden="true"></i>
+            Tool selection
+          </h2>
+          <p>
+            Tools are included when they meet all of the following baseline
+            criteria:
+          </p>
+          <ul class="method-list">
+            <li>
+              Active maintenance — a release or security update within the past
+              18 months
+            </li>
+            <li>Publicly documented privacy policy or equivalent disclosure</li>
+            <li>Sufficient public information to score all three dimensions</li>
+            <li>
+              Not primarily a commercial or enterprise product with no consumer
+              offering
+            </li>
+            <li>
+              A meaningful user base or demonstrated technical merit warranting
+              evaluation
+            </li>
+          </ul>
+          <p>
+            Tools are not required to be open source, free, or
+            privacy-maximizing to be listed. Tools with poor scores are included
+            where they are commonly recommended or used — accurate low scores
+            are more useful than omission.
+          </p>
+        </section>
+
+        <hr class="method-hr" />
+
+        <!-- Exclusions -->
+        <section class="method-section" id="exclusions">
+          <h2 class="method-section__title">
+            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+            Exclusion criteria
+          </h2>
+          <p>Tools are excluded or removed when any of the following apply:</p>
+          <ul class="method-list method-list--warn">
+            <li>
+              Documented evidence of deliberate user deception (fake no-logs
+              claims, hidden data sharing)
+            </li>
+            <li>
+              Acquisition by an entity with a documented history of privacy
+              violations, without policy reversal
+            </li>
+            <li>
+              Active, unpatched critical vulnerabilities with no mitigation path
+            </li>
+            <li>Discontinued development with no successor project</li>
+            <li>
+              Legal orders resulting in data disclosure that contradict stated
+              policy, without policy update
+            </li>
+          </ul>
+        </section>
+
+        <hr class="method-hr" />
+
+        <!-- Review cadence -->
+        <section class="method-section" id="review">
+          <h2 class="method-section__title">
+            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+            Review cadence
+          </h2>
+          <p>
+            All tools are reviewed on a quarterly schedule. Between scheduled
+            reviews, scores may be updated out-of-cycle in response to:
+          </p>
+          <ul class="method-list">
+            <li>Publication of a new independent audit</li>
+            <li>Disclosed security vulnerability (CVE or equivalent)</li>
+            <li>Material change to privacy policy or terms of service</li>
+            <li>Ownership or corporate structure change</li>
+            <li>Legal proceedings involving user data</li>
+          </ul>
+          <p>
+            Each tool entry shows a <strong>Last reviewed</strong> date reflecting
+            the most recent substantive review, not the date of last minor edit.
+          </p>
+        </section>
+
+        <hr class="method-hr" />
+
+        <!-- Editorial standards -->
+        <section class="method-section" id="standards">
+          <h2 class="method-section__title">
+            <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
+            Editorial standards
+          </h2>
+          <div class="method-callout method-callout--neutral">
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+            <span>
+              No tool, vendor, or organization has editorial input into scores
+              or descriptions. Corrections to factual errors are accepted via
+              the public issue tracker.
+            </span>
+          </div>
+          <p>
+            Descriptions use neutral, analytical language. The following
+            conventions apply throughout:
+          </p>
+          <div class="method-tone-grid">
+            <div class="method-tone-card method-tone-card--good">
+              <div class="method-tone-card__label">
+                <i class="fa-solid fa-check" aria-hidden="true"></i> Used
+              </div>
+              <ul>
+                <li>"Supports anonymous signup without email requirement"</li>
+                <li>"No-logs policy verified by independent audit (2024)"</li>
+                <li>"Subject to Five Eyes intelligence-sharing agreements"</li>
+              </ul>
+            </div>
+            <div class="method-tone-card method-tone-card--bad">
+              <div class="method-tone-card__label">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i> Avoided
+              </div>
+              <ul>
+                <li>"Ultimate privacy shield against mass surveillance"</li>
+                <li>"Trusted by millions of privacy-conscious users"</li>
+                <li>"The most secure option available"</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .method-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 3rem;
+    align-items: start;
+    padding-block: 1rem;
+  }
+
+  @media (max-width: 760px) {
+    .method-layout {
+      grid-template-columns: 1fr;
+    }
+    .method-toc {
+      display: none;
+    }
+  }
+
+  /* TOC */
+  .method-toc {
+    top: 1.5rem;
+    font-size: 0.8125rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .method-toc__heading {
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--clr-muted-light);
+    margin-bottom: 0.5rem;
+    padding-left: 0.625rem;
+  }
+
+  .method-toc__link {
+    display: block;
+    padding: 0.3rem 0.625rem;
+    color: var(--clr-muted);
+    border-left: 2px solid transparent;
+    border-radius: 0 4px 4px 0;
+    transition:
+      color 0.1s,
+      border-color 0.1s,
+      background 0.1s;
+    text-decoration: none;
+    line-height: 1.4;
+  }
+  .method-toc__link:hover {
+    color: var(--clr-text);
+    border-left-color: var(--clr-border-strong);
+    background: var(--clr-surface);
+  }
+  .method-toc__link.indent {
+    padding-left: 1.25rem;
+    font-size: 0.75rem;
+  }
+
+  /* Body */
+  .method-body {
+    min-width: 0;
+  }
+
+  .method-section {
+    margin-bottom: 0.5rem;
+  }
+
+  .method-section p {
+    font-size: 0.9375rem;
+    color: var(--clr-text-secondary);
+    line-height: 1.75;
+    margin-bottom: 1rem;
+  }
+
+  .method-section__title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--clr-text);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    letter-spacing: -0.015em;
+  }
+
+  .method-section__title i {
+    color: var(--clr-muted);
+    font-size: 0.875rem;
+  }
+
+  .method-hr {
+    border: none;
+    border-top: 1px solid var(--clr-border);
+    margin-block: 2rem;
+  }
+
+  /* Table */
+  .method-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .method-table thead {
+    background: var(--clr-surface-alt);
+  }
+
+  .method-table th {
+    text-align: left;
+    padding: 0.625rem 1rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--clr-muted);
+    border-bottom: 1px solid var(--clr-border);
+  }
+
+  .method-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--clr-border);
+    color: var(--clr-text-secondary);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .method-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .method-table tbody tr:hover {
+    background: var(--clr-surface);
+  }
+
+  .method-weight {
+    display: inline-block;
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .method-weight--high {
+    background: var(--clr-score-high-bg);
+    color: var(--clr-score-high);
+  }
+  .method-weight--mid {
+    background: var(--clr-score-mid-bg);
+    color: var(--clr-score-mid);
+  }
+  .method-weight--low {
+    background: var(--clr-surface-alt);
+    color: var(--clr-muted);
+  }
+
+  /* Callout */
+  .method-callout {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    border: 1px solid;
+  }
+  .method-callout i {
+    margin-top: 0.1rem;
+    flex-shrink: 0;
+  }
+
+  .method-callout--info {
+    background: var(--clr-score-high-bg);
+    border-color: rgba(74, 222, 128, 0.2);
+    color: var(--clr-score-high);
+  }
+  .method-callout--info span {
+    color: var(--clr-text-secondary);
+  }
+
+  .method-callout--neutral {
+    background: var(--clr-surface-alt);
+    border-color: var(--clr-border-strong);
+    color: var(--clr-muted);
+  }
+  .method-callout--neutral span {
+    color: var(--clr-text-secondary);
+  }
+
+  /* Score scale */
+  .method-score-scale {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .method-score-scale__item {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    padding: 0.25rem 0.625rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .method-score-scale__label {
+    font-size: 0.875rem;
+    color: var(--clr-text-secondary);
+  }
+
+  /* Lists */
+  .method-list {
+    font-size: 0.9375rem;
+    color: var(--clr-text-secondary);
+    line-height: 1.7;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin-bottom: 1rem;
+  }
+  .method-list li {
+    padding-left: 1.375rem;
+    position: relative;
+  }
+  .method-list li::before {
+    content: '';
+    position: absolute;
+    left: 0.375rem;
+    top: 0.65em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--clr-muted-light);
+  }
+  .method-list--warn li::before {
+    background: var(--clr-score-low);
+  }
+
+  /* Attr grid */
+  .method-attr-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .method-attr-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.875rem;
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius);
+  }
+  .method-attr-card__icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--clr-surface-alt);
+    color: var(--clr-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.875rem;
+  }
+  .method-attr-card__label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--clr-text);
+    margin-bottom: 0.25rem;
+  }
+  .method-attr-card__desc {
+    font-size: 0.75rem;
+    color: var(--clr-muted);
+    line-height: 1.5;
+  }
+
+  /* Tone examples */
+  .method-tone-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 600px) {
+    .method-tone-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .method-tone-card {
+    padding: 1rem;
+    border-radius: var(--radius);
+    border: 1px solid;
+    font-size: 0.8125rem;
+  }
+  .method-tone-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    color: var(--clr-text-secondary);
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .method-tone-card--good {
+    background: var(--clr-score-high-bg);
+    border-color: rgba(74, 222, 128, 0.2);
+  }
+  .method-tone-card--bad {
+    background: var(--clr-score-low-bg);
+    border-color: rgba(248, 113, 113, 0.2);
+  }
+  .method-tone-card__label {
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .method-tone-card--good .method-tone-card__label {
+    color: var(--clr-score-high);
+  }
+  .method-tone-card--bad .method-tone-card__label {
+    color: var(--clr-score-low);
+  }
+</style>

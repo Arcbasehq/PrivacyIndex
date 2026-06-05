@@ -1,0 +1,37 @@
+{
+  "slug": "ivpn",
+  "name": "IVPN",
+  "category": "vpn",
+  "website": "https://www.ivpn.net",
+  "pricing": {
+    "model": "paid",
+    "details": "Standard: $6/month. Pro: $10/month (multi-hop, port forwarding). Annual discounts available."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": true,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 9.0,
+    "security": 8.5,
+    "usability": 7.0
+  },
+  "tags": [
+    "wireguard",
+    "openvpn",
+    "no-logs",
+    "anonymous-payment",
+    "open-source",
+    "audited",
+    "multi-hop"
+  ],
+  "lastReviewed": "2025-10-01",
+  "description": "Privacy-focused VPN provider registered in Gibraltar with no-logs policy verified by independent audit. Supports anonymous signup and multi-hop routing on Pro plans.",
+  "rationale": "IVPN has undergone independent security audits and consistently demonstrates a no-logs posture in practice. Anonymous signup without email is supported. The multi-hop feature routes traffic through two separate VPN servers, reducing the impact of a single-server compromise. Client applications are open source."
+}

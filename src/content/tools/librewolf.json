@@ -1,0 +1,36 @@
+{
+  "slug": "librewolf",
+  "name": "LibreWolf",
+  "category": "browser",
+  "website": "https://librewolf.net",
+  "pricing": {
+    "model": "free",
+    "details": "Free and open source. Community-maintained project."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": false,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 9.0,
+    "security": 8.5,
+    "usability": 7.0
+  },
+  "tags": [
+    "firefox-fork",
+    "open-source",
+    "hardened",
+    "no-telemetry",
+    "ublock-origin-bundled",
+    "arkenfox-based"
+  ],
+  "lastReviewed": "2025-10-01",
+  "description": "Privacy-hardened Firefox fork with pre-applied arkenfox user.js settings, telemetry removed, and uBlock Origin bundled. Desktop-only.",
+  "rationale": "LibreWolf eliminates the configuration burden of hardening Firefox manually. Telemetry and all Mozilla data collection are removed at the source. uBlock Origin is pre-installed. The primary trade-off is a smaller maintenance team compared to Mozilla, which may introduce lag in security patches. No mobile version exists. Suitable for users who want maximum Firefox privacy without manual configuration."
+}

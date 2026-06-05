@@ -1,0 +1,617 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { guidePages } from '../data/guide-pages';
+import { getThreads, initSchema } from '../lib/db';
+
+const auth = Astro.locals.auth();
+if (!auth.userId) return Astro.redirect('/sign-in');
+
+const clerkUser = await Astro.locals.currentUser();
+
+const allTools = await getCollection('tools');
+const totalTools = allTools.length;
+const totalAudited = allTools.filter(t => t.data.attributes.auditedThirdParty).length;
+const totalOss = allTools.filter(t => t.data.attributes.openSource).length;
+
+const catConfig = [
+  { slug: 'vpn',       label: 'VPN',          color: '#2dd4bf', icon: 'fa-shield-halved' },
+  { slug: 'browser',   label: 'Browser',       color: '#60a5fa', icon: 'fa-globe' },
+  { slug: 'email',     label: 'Email',         color: '#f87171', icon: 'fa-envelope' },
+  { slug: 'messaging', label: 'Messaging',     color: '#34d399', icon: 'fa-comments' },
+  { slug: 'dns',       label: 'DNS',           color: '#fb923c', icon: 'fa-server' },
+  { slug: 'os',        label: 'OS',            color: '#94a3b8', icon: 'fa-laptop-code' },
+  { slug: 'search',    label: 'Search',        color: '#a78bfa', icon: 'fa-magnifying-glass' },
+];
+
+// Best tool per category
+const bestPerCat = catConfig.map(cat => {
+  const tools = allTools
+    .filter(t => t.data.category === cat.slug)
+    .sort((a, b) => (b.data.scores.privacy + b.data.scores.security) - (a.data.scores.privacy + a.data.scores.security));
+  return { ...cat, tool: tools[0] ?? null };
+});
+
+// Top 8 tools overall
+const topTools = [...allTools]
+  .sort((a, b) => (b.data.scores.privacy + b.data.scores.security) - (a.data.scores.privacy + a.data.scores.security))
+  .slice(0, 8);
+
+// Recent Discuss threads
+let recentThreads: any[] = [];
+try {
+  await initSchema();
+  recentThreads = (await getThreads()).slice(0, 5) as any[];
+} catch {}
+
+const firstName = clerkUser?.firstName ?? 'there';
+const displayName = clerkUser?.firstName
+  ? `${clerkUser.firstName}${clerkUser.lastName ? ' ' + clerkUser.lastName : ''}`
+  : clerkUser?.emailAddresses?.[0]?.emailAddress ?? 'User';
+
+const checklist = [
+  { id: 'browser',  label: 'Using a privacy-focused browser',       href: '/private-browser',                  impact: 'high',   icon: 'fa-globe' },
+  { id: 'dns',      label: 'DNS queries encrypted',                  href: '/encrypted-dns',                    impact: 'high',   icon: 'fa-server' },
+  { id: 'passwords',label: 'Using a password manager',              href: '/secure-password-manager',          impact: 'high',   icon: 'fa-key' },
+  { id: '2fa',      label: '2FA on all critical accounts',          href: '/two-factor-authentication-2fa',    impact: 'high',   icon: 'fa-mobile-screen' },
+  { id: 'email',    label: 'Email provider is zero-knowledge',      href: '/privacy-email',                    impact: 'medium', icon: 'fa-envelope' },
+  { id: 'vpn',      label: 'VPN evaluated for threat model',        href: '/privacy-vpn',                      impact: 'medium', icon: 'fa-shield-halved' },
+  { id: 'mobile',   label: 'Mobile OS hardened',                    href: '/android-alternatives',             impact: 'medium', icon: 'fa-mobile' },
+  { id: 'search',   label: 'Private search engine in use',          href: '/search',                           impact: 'low',    icon: 'fa-magnifying-glass' },
+  { id: 'metadat',  label: 'Messaging metadata minimised',          href: '/secure-messaging',                 impact: 'medium', icon: 'fa-message' },
+  { id: 'payments', label: 'Privacy-aware payment methods',         href: '/privacy-vpn',                      impact: 'low',    icon: 'fa-credit-card' },
+];
+
+function timeAgo(date: string) {
+  const s = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
+  if (s < 60) return 'just now';
+  if (s < 3600) return `${Math.floor(s/60)}m ago`;
+  if (s < 86400) return `${Math.floor(s/3600)}h ago`;
+  return `${Math.floor(s/86400)}d ago`;
+}
+
+function scoreClass(n: number) {
+  if (n >= 8) return 'score--high';
+  if (n >= 6) return 'score--mid';
+  return 'score--low';
+}
+
+const catDiscussColors: Record<string, string> = {
+  general: '#8b929e', vpn: '#2dd4bf', browsers: '#60a5fa', email: '#f87171',
+  messaging: '#34d399', os: '#94a3b8', threat_model: '#a78bfa', tools: '#fb923c',
+};
+---
+
+<Layout title="Dashboard">
+  <div class="main-content">
+
+    <!-- ── Header bar ── -->
+    <div class="db-header">
+      <div class="db-header__left">
+        {clerkUser?.imageUrl
+          ? <img src={clerkUser.imageUrl} class="db-avatar" alt="" />
+          : <div class="db-avatar db-avatar--init">{displayName[0].toUpperCase()}</div>
+        }
+        <div>
+          <div class="db-header__name">{displayName}</div>
+          <div class="db-header__email">{clerkUser?.emailAddresses?.[0]?.emailAddress}</div>
+        </div>
+      </div>
+      <div class="db-header__actions">
+        <button class="db-btn db-btn--ghost" onclick="if(window.Clerk) window.Clerk.openUserProfile();">
+          <i class="fa-solid fa-gear"></i> Settings
+        </button>
+        <button class="db-btn db-btn--danger" onclick="if(window.Clerk) window.Clerk.signOut().then(()=>location.href='/');">
+          <i class="fa-solid fa-right-from-bracket"></i> Sign out
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Privacy score hero ── -->
+    <div class="db-score-hero">
+      <div class="db-score-hero__left">
+        <div class="db-score-hero__label">Your Privacy Score</div>
+        <div class="db-score-hero__value" id="score-value">–</div>
+        <div class="db-score-hero__track">
+          <div class="db-score-hero__fill" id="score-fill" style="width:0%"></div>
+        </div>
+        <div class="db-score-hero__sub" id="score-sub">Check items below to calculate</div>
+      </div>
+      <div class="db-score-hero__right">
+        <div class="db-score-next" id="score-next" style="display:none;">
+          <div class="db-score-next__label">
+            <i class="fa-solid fa-bolt"></i> Recommended next step
+          </div>
+          <div class="db-score-next__text" id="score-next-text"></div>
+          <a class="db-score-next__link" id="score-next-link" href="#">Learn more →</a>
+        </div>
+        <div class="db-score-stats">
+          <div class="db-score-stat">
+            <div class="db-score-stat__val">{totalTools}</div>
+            <div class="db-score-stat__lbl">Tools</div>
+          </div>
+          <div class="db-score-stat">
+            <div class="db-score-stat__val">{totalAudited}</div>
+            <div class="db-score-stat__lbl">Audited</div>
+          </div>
+          <div class="db-score-stat">
+            <div class="db-score-stat__val">{totalOss}</div>
+            <div class="db-score-stat__lbl">Open source</div>
+          </div>
+          <div class="db-score-stat">
+            <div class="db-score-stat__val">{guidePages.length}</div>
+            <div class="db-score-stat__lbl">Guides</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="db-grid">
+      <!-- ── Left column ── -->
+      <div class="db-col">
+
+        <!-- Privacy checklist (interactive) -->
+        <section class="db-card">
+          <div class="db-card__hd">
+            <i class="fa-solid fa-list-check"></i>
+            Privacy checklist
+            <span class="db-card__hd-badge" id="checklist-count">0 / {checklist.length}</span>
+          </div>
+          <div class="db-card__body">
+            {checklist.map(item => (
+              <label class="db-check-row" data-id={item.id} data-href={item.href} data-label={item.label}>
+                <input type="checkbox" class="db-check-input" data-id={item.id} />
+                <div class={`db-check-dot db-check-dot--${item.impact}`}></div>
+                <div class="db-check-info">
+                  <span class="db-check-label">{item.label}</span>
+                  <span class={`db-check-impact db-check-impact--${item.impact}`}>{item.impact} impact</span>
+                </div>
+                <a href={item.href} class="db-check-link" onclick="event.stopPropagation();">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+              </label>
+            ))}
+          </div>
+          <div class="db-card__ft">
+            <span class="db-card__ft-note">Progress saved locally in your browser.</span>
+            <button class="db-card__ft-reset" id="reset-checklist">Reset</button>
+          </div>
+        </section>
+
+        <!-- Best tool per category -->
+        <section class="db-card">
+          <div class="db-card__hd">
+            <i class="fa-solid fa-medal"></i>
+            Top pick per category
+          </div>
+          <div class="db-card__body">
+            {bestPerCat.map(cat => cat.tool && (
+              <a href={`/tool/${cat.tool.data.slug}`} class="db-pick-row">
+                <div class="db-pick-row__cat" style={`color:${cat.color}`}>
+                  <i class={`fa-solid ${cat.icon}`}></i>
+                </div>
+                <div class="db-pick-row__info">
+                  <span class="db-pick-row__cat-label">{cat.label}</span>
+                  <span class="db-pick-row__name">{cat.tool.data.name}</span>
+                </div>
+                <div class="db-pick-row__scores">
+                  <span class={`score ${scoreClass(cat.tool.data.scores.privacy)}`} title="Privacy">
+                    {cat.tool.data.scores.privacy.toFixed(1)}
+                  </span>
+                  <span class={`score ${scoreClass(cat.tool.data.scores.security)}`} title="Security">
+                    {cat.tool.data.scores.security.toFixed(1)}
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ── Right column ── -->
+      <div class="db-col">
+
+        <!-- Recent Discuss threads -->
+        <section class="db-card">
+          <div class="db-card__hd">
+            <i class="fa-solid fa-comments"></i>
+            Recent discussions
+            <a href="/discuss" class="db-card__hd-link">View all →</a>
+          </div>
+          <div class="db-card__body">
+            {recentThreads.length === 0 ? (
+              <div class="db-empty">
+                <i class="fa-solid fa-seedling"></i>
+                <span>No threads yet.</span>
+                <a href="/discuss/new">Start one →</a>
+              </div>
+            ) : recentThreads.map((t: any) => (
+              <a href={`/discuss/${t.slug}`} class="db-thread-row">
+                <div class="db-thread-row__cat" style={`color:${catDiscussColors[t.category] ?? '#8b929e'}`}>
+                  <i class="fa-solid fa-message"></i>
+                </div>
+                <div class="db-thread-row__info">
+                  <div class="db-thread-row__title">{t.title}</div>
+                  <div class="db-thread-row__meta">
+                    {t.author_name} · {timeAgo(t.created_at)} · {t.reply_count} replies
+                  </div>
+                </div>
+              </a>
+            ))}
+            <a href="/discuss/new" class="db-discuss-cta">
+              <i class="fa-solid fa-pen-to-square"></i> Start a thread
+            </a>
+          </div>
+        </section>
+
+        <!-- Top rated tools -->
+        <section class="db-card">
+          <div class="db-card__hd">
+            <i class="fa-solid fa-trophy"></i>
+            Highest scored tools
+            <a href="/" class="db-card__hd-link">Browse all →</a>
+          </div>
+          <div class="db-card__body">
+            {topTools.map((tool, i) => (
+              <a href={`/tool/${tool.data.slug}`} class="db-tool-row">
+                <span class="db-tool-row__rank">#{i + 1}</span>
+                <div class="db-tool-row__info">
+                  <span class="db-tool-row__name">{tool.data.name}</span>
+                  <span class="db-tool-row__cat">{tool.data.category}</span>
+                </div>
+                <div class="db-tool-row__scores">
+                  <span class={`score ${scoreClass(tool.data.scores.privacy)}`} title="Privacy">
+                    {tool.data.scores.privacy.toFixed(1)}
+                  </span>
+                  <span class={`score ${scoreClass(tool.data.scores.security)}`} title="Security">
+                    {tool.data.scores.security.toFixed(1)}
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script define:vars={{ checklist }}>
+  const STORAGE_KEY = 'pi_checklist_v1';
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
+  }
+  function save(state) { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+  const weights = { high: 3, medium: 2, low: 1 };
+  const maxScore = checklist.reduce((s, i) => s + weights[i.impact], 0);
+
+  function updateScore(state) {
+    let earned = 0;
+    checklist.forEach(item => { if (state[item.id]) earned += weights[item.impact]; });
+    const pct = Math.round((earned / maxScore) * 100);
+
+    document.getElementById('score-value').textContent = pct + '%';
+    document.getElementById('score-fill').style.width = pct + '%';
+
+    const fill = document.getElementById('score-fill');
+    fill.style.background = pct >= 80 ? '#34d399' : pct >= 50 ? '#fb923c' : '#f87171';
+
+    const done = checklist.filter(i => state[i.id]).length;
+    document.getElementById('checklist-count').textContent = `${done} / ${checklist.length}`;
+
+    const sub = document.getElementById('score-sub');
+    if (pct >= 90) sub.textContent = 'Excellent — very strong privacy posture.';
+    else if (pct >= 70) sub.textContent = 'Good — a few gaps remain.';
+    else if (pct >= 40) sub.textContent = 'Fair — key items need attention.';
+    else sub.textContent = 'Getting started — check items as you complete them.';
+
+    // Recommended next step = highest-impact unchecked item
+    const nextItem = checklist.find(i => !state[i.id] && i.impact === 'high')
+      ?? checklist.find(i => !state[i.id] && i.impact === 'medium')
+      ?? checklist.find(i => !state[i.id]);
+
+    const nextEl = document.getElementById('score-next');
+    if (nextItem) {
+      document.getElementById('score-next-text').textContent = nextItem.label;
+      document.getElementById('score-next-link').href = nextItem.href;
+      nextEl.style.display = '';
+    } else {
+      nextEl.style.display = 'none';
+    }
+  }
+
+  function init() {
+    const state = load();
+    document.querySelectorAll('.db-check-input').forEach(cb => {
+      const id = cb.dataset.id;
+      cb.checked = !!state[id];
+      cb.addEventListener('change', () => {
+        state[id] = cb.checked;
+        save(state);
+        updateScore(state);
+        cb.closest('.db-check-row').classList.toggle('db-check-row--done', cb.checked);
+      });
+      if (state[id]) cb.closest('.db-check-row').classList.add('db-check-row--done');
+    });
+    updateScore(state);
+
+    document.getElementById('reset-checklist').addEventListener('click', () => {
+      if (!confirm('Reset checklist?')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      document.querySelectorAll('.db-check-input').forEach(cb => {
+        cb.checked = false;
+        cb.closest('.db-check-row').classList.remove('db-check-row--done');
+      });
+      updateScore({});
+    });
+  }
+
+  init();
+</script>
+
+<style>
+  /* ─── Header bar ─── */
+  .db-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--clr-border);
+    flex-wrap: wrap;
+  }
+  .db-header__left { display: flex; align-items: center; gap: 0.75rem; }
+  .db-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 2px solid var(--clr-border-strong);
+    flex-shrink: 0;
+    object-fit: cover;
+  }
+  .db-avatar--init {
+    background: var(--clr-surface-alt);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.875rem; font-weight: 700; color: var(--clr-muted);
+  }
+  .db-header__name { font-size: 0.875rem; font-weight: 700; color: var(--clr-text); }
+  .db-header__email { font-size: 0.75rem; color: var(--clr-muted); }
+  .db-header__actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+  .db-btn {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    font-size: 0.75rem; font-weight: 600;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--clr-border-strong);
+    cursor: pointer; font-family: var(--font-sans);
+    text-decoration: none; transition: background 0.1s;
+  }
+  .db-btn--ghost { background: var(--clr-surface); color: var(--clr-text-secondary); }
+  .db-btn--ghost:hover { background: var(--clr-surface-alt); }
+  .db-btn--danger { background: rgba(248,113,113,.08); color: #f87171; border-color: rgba(248,113,113,.2); }
+  .db-btn--danger:hover { background: rgba(248,113,113,.18); }
+
+  /* ─── Score hero ─── */
+  .db-score-hero {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1.25rem;
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+    align-items: start;
+  }
+  @media (max-width: 640px) { .db-score-hero { grid-template-columns: 1fr; } }
+
+  .db-score-hero__label {
+    font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--clr-muted); margin-bottom: 0.4rem;
+  }
+  .db-score-hero__value {
+    font-size: 3rem; font-weight: 800; letter-spacing: -0.05em;
+    color: var(--clr-text); line-height: 1; margin-bottom: 0.75rem;
+  }
+  .db-score-hero__track {
+    height: 6px; border-radius: 99px;
+    background: var(--clr-surface-alt);
+    overflow: hidden; margin-bottom: 0.5rem;
+  }
+  .db-score-hero__fill {
+    height: 100%; border-radius: 99px;
+    background: #34d399; transition: width 0.4s ease, background 0.3s;
+  }
+  .db-score-hero__sub { font-size: 0.75rem; color: var(--clr-muted); }
+
+  .db-score-hero__right { display: flex; flex-direction: column; gap: 0.875rem; }
+
+  .db-score-next {
+    background: var(--clr-bg-alt);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius);
+    padding: 0.75rem 0.875rem;
+  }
+  .db-score-next__label {
+    font-size: 0.625rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #fb923c; margin-bottom: 0.3rem;
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+  .db-score-next__text { font-size: 0.8125rem; font-weight: 600; color: var(--clr-text); margin-bottom: 0.25rem; }
+  .db-score-next__link { font-size: 0.75rem; color: #818cf8; text-decoration: none; }
+
+  .db-score-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;
+  }
+  .db-score-stat {
+    background: var(--clr-bg-alt);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.625rem;
+    text-align: center;
+  }
+  .db-score-stat__val { font-size: 1.125rem; font-weight: 800; letter-spacing: -0.03em; color: var(--clr-text); }
+  .db-score-stat__lbl { font-size: 0.625rem; color: var(--clr-muted); }
+
+  /* ─── Grid ─── */
+  .db-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
+  @media (max-width: 760px) { .db-grid { grid-template-columns: 1fr; } }
+  .db-col { display: flex; flex-direction: column; gap: 1rem; }
+
+  /* ─── Card ─── */
+  .db-card {
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .db-card__hd {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--clr-muted);
+    padding: 0.625rem 0.875rem;
+    border-bottom: 1px solid var(--clr-border);
+    background: var(--clr-bg-alt);
+  }
+  .db-card__hd i { font-size: 0.625rem; }
+  .db-card__hd-link {
+    margin-left: auto; font-size: 0.625rem; font-weight: 500;
+    color: var(--clr-muted); text-decoration: none; letter-spacing: 0; text-transform: none;
+  }
+  .db-card__hd-link:hover { color: var(--clr-text-secondary); }
+  .db-card__hd-badge {
+    margin-left: auto; font-size: 0.625rem; font-weight: 600;
+    padding: 0.1rem 0.4rem; border-radius: 99px;
+    background: var(--clr-surface-alt); color: var(--clr-text-secondary);
+    letter-spacing: 0; text-transform: none;
+  }
+  .db-card__body { padding: 0; }
+  .db-card__ft {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.5rem 0.875rem;
+    border-top: 1px solid var(--clr-border);
+    background: var(--clr-bg-alt);
+  }
+  .db-card__ft-note { font-size: 0.6875rem; color: var(--clr-muted); }
+  .db-card__ft-reset {
+    font-size: 0.6875rem; color: var(--clr-muted); background: none;
+    border: none; cursor: pointer; font-family: var(--font-sans); padding: 0;
+  }
+  .db-card__ft-reset:hover { color: #f87171; }
+
+  /* ─── Checklist ─── */
+  .db-check-row {
+    display: flex; align-items: center; gap: 0.625rem;
+    padding: 0.5rem 0.875rem;
+    border-bottom: 1px solid var(--clr-border);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .db-check-row:last-child { border-bottom: none; }
+  .db-check-row:hover { background: var(--clr-surface-alt); }
+  .db-check-row--done .db-check-label { text-decoration: line-through; color: var(--clr-muted); }
+  .db-check-row--done .db-check-dot { opacity: 0.3; }
+
+  .db-check-input { display: none; }
+  .db-check-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .db-check-dot--high   { background: #f87171; }
+  .db-check-dot--medium { background: #fb923c; }
+  .db-check-dot--low    { background: #94a3b8; }
+
+  .db-check-info { flex: 1; min-width: 0; }
+  .db-check-label { font-size: 0.8125rem; color: var(--clr-text-secondary); display: block; }
+  .db-check-impact {
+    font-size: 0.625rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .db-check-impact--high   { color: #f87171; }
+  .db-check-impact--medium { color: #fb923c; }
+  .db-check-impact--low    { color: #94a3b8; }
+
+  .db-check-link {
+    font-size: 0.625rem; color: var(--clr-muted-light); padding: 0.25rem;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .db-check-link:hover { color: #818cf8; }
+
+  /* ─── Best-per-cat ─── */
+  .db-pick-row {
+    display: flex; align-items: center; gap: 0.625rem;
+    padding: 0.5rem 0.875rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--clr-border);
+    transition: background 0.1s;
+  }
+  .db-pick-row:last-child { border-bottom: none; }
+  .db-pick-row:hover { background: var(--clr-surface-alt); }
+  .db-pick-row__cat { width: 16px; text-align: center; font-size: 0.8rem; flex-shrink: 0; }
+  .db-pick-row__info { flex: 1; min-width: 0; }
+  .db-pick-row__cat-label {
+    font-size: 0.625rem; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--clr-muted); display: block;
+  }
+  .db-pick-row__name { font-size: 0.8125rem; font-weight: 600; color: var(--clr-text); }
+  .db-pick-row__scores { display: flex; gap: 0.25rem; }
+
+  /* ─── Discuss threads ─── */
+  .db-thread-row {
+    display: flex; align-items: flex-start; gap: 0.625rem;
+    padding: 0.5rem 0.875rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--clr-border);
+    transition: background 0.1s;
+  }
+  .db-thread-row:hover { background: var(--clr-surface-alt); }
+  .db-thread-row__cat { font-size: 0.75rem; flex-shrink: 0; margin-top: 0.15rem; }
+  .db-thread-row__info { flex: 1; min-width: 0; }
+  .db-thread-row__title {
+    font-size: 0.8125rem; font-weight: 600; color: var(--clr-text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0.1rem;
+  }
+  .db-thread-row__meta { font-size: 0.6875rem; color: var(--clr-muted); }
+
+  .db-discuss-cta {
+    display: flex; align-items: center; justify-content: center; gap: 0.375rem;
+    padding: 0.625rem;
+    font-size: 0.75rem; font-weight: 600; color: #818cf8;
+    text-decoration: none; border-top: 1px solid var(--clr-border);
+    transition: background 0.1s;
+  }
+  .db-discuss-cta:hover { background: var(--clr-surface-alt); }
+
+  /* ─── Top tools ─── */
+  .db-tool-row {
+    display: flex; align-items: center; gap: 0.625rem;
+    padding: 0.4rem 0.875rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--clr-border);
+    transition: background 0.1s;
+  }
+  .db-tool-row:last-child { border-bottom: none; }
+  .db-tool-row:hover { background: var(--clr-surface-alt); }
+  .db-tool-row__rank {
+    font-size: 0.625rem; font-weight: 700; font-family: var(--font-mono);
+    color: var(--clr-muted-light); width: 20px; text-align: center; flex-shrink: 0;
+  }
+  .db-tool-row__info { flex: 1; min-width: 0; display: flex; align-items: center; gap: 0.5rem; }
+  .db-tool-row__name { font-size: 0.8125rem; font-weight: 600; color: var(--clr-text); }
+  .db-tool-row__cat {
+    font-size: 0.5625rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--clr-muted); background: var(--clr-surface-alt); border-radius: 999px;
+    padding: 0.1rem 0.4rem;
+  }
+  .db-tool-row__scores { display: flex; gap: 0.25rem; }
+
+  /* ─── Empty state ─── */
+  .db-empty {
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 1.5rem; font-size: 0.8125rem; color: var(--clr-muted);
+  }
+  .db-empty a { color: #818cf8; text-decoration: none; }
+</style>

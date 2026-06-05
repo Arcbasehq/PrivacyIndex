@@ -1,0 +1,38 @@
+{
+  "slug": "calyxos",
+  "name": "CalyxOS",
+  "category": "os",
+  "website": "https://calyxos.org",
+  "pricing": {
+    "model": "free",
+    "details": "Free and open source Android-based operating system focused on privacy with usability-oriented defaults."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": false,
+    "anonymousSignup": false,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": false
+  },
+  "scores": {
+    "privacy": 8.5,
+    "security": 8.8,
+    "usability": 8.5
+  },
+  "tags": [
+    "android",
+    "privacy-focused",
+    "microg",
+    "f-droid",
+    "sandboxing",
+    "verified-boot",
+    "mobile-os",
+    "user-friendly"
+  ],
+  "lastReviewed": "2025-11-01",
+  "description": "Android-based operating system focused on privacy with strong defaults, bundled privacy-friendly app ecosystem support, and optional microG integration for improved app compatibility.",
+  "rationale": "CalyxOS is designed as a privacy-focused Android alternative that prioritizes ease of use while reducing dependence on Google services. It includes privacy enhancements such as hardened defaults and optional microG support to improve app compatibility. Compared to more aggressively hardened systems, it makes additional usability and compatibility tradeoffs in exchange for a smoother daily experience. It is not aimed at anonymity or advanced threat models, but rather mainstream privacy-conscious users."
+}

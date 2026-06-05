@@ -1,0 +1,36 @@
+{
+  "slug": "quad9",
+  "name": "Quad9",
+  "category": "dns",
+  "website": "https://quad9.net",
+  "pricing": {
+    "model": "free",
+    "details": "Free. Operated by Quad9 Foundation, a non-profit incorporated in Switzerland."
+  },
+  "attributes": {
+    "openSource": false,
+    "auditedThirdParty": false,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": true,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 8.5,
+    "security": 9.0,
+    "usability": 7.5
+  },
+  "tags": [
+    "dns-over-https",
+    "dns-over-tls",
+    "threat-blocking",
+    "non-profit",
+    "swiss-jurisdiction",
+    "no-logs"
+  ],
+  "lastReviewed": "2025-10-01",
+  "description": "Non-profit DNS resolver operated from Switzerland with no-logging policy and automatic malicious domain blocking using threat intelligence feeds.",
+  "rationale": "Quad9 is operated by a Swiss non-profit, providing favorable jurisdictional protections. The no-logs policy means query data is not retained after the resolver cache TTL. Threat blocking uses aggregated intelligence feeds to block known malicious domains at the resolver level, adding a security layer without content filtering. No analytics dashboard is available, which is a usability trade-off relative to NextDNS. Encrypted DNS (DoH/DoT) is supported on both 9.9.9.9 and 149.112.112.112 resolver addresses."
+}

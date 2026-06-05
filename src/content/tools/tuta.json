@@ -1,0 +1,36 @@
+{
+  "slug": "tuta",
+  "name": "Tuta",
+  "category": "email",
+  "website": "https://tuta.com",
+  "pricing": {
+    "model": "freemium",
+    "details": "Free tier: 1GB storage, 1 address. Revolutionary plan €3/month with custom domains."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": false,
+    "anonymousSignup": false,
+    "e2eEncrypted": true,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 8.5,
+    "security": 9.0,
+    "usability": 8.0
+  },
+  "tags": [
+    "end-to-end-encryption",
+    "open-source",
+    "quantum-resistant",
+    "german-jurisdiction",
+    "zero-access",
+    "calendar"
+  ],
+  "lastReviewed": "2025-11-01",
+  "description": "End-to-end encrypted email and calendar service based in Germany. Encrypts subject lines in addition to message body, unlike most E2E email providers.",
+  "rationale": "Tuta differentiates itself by encrypting email subject lines and calendar event data, not only message bodies. The proprietary encryption protocol has been updated to incorporate post-quantum algorithms. Applications are fully open source. German jurisdiction (GDPR) provides clear data handling obligations. No PGP support, so E2E encryption is limited to communication between Tuta users."
+}

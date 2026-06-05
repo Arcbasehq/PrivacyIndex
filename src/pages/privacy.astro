@@ -1,0 +1,132 @@
+---
+export const prerender = true;
+
+import Layout from '../layouts/Layout.astro';
+import CategoryIcon from '../components/CategoryIcon.astro';
+import ToolLogo from '../components/ToolLogo.astro';
+import { getCollection } from 'astro:content';
+
+const allTools = await getCollection('tools');
+
+const categories = [
+  { slug: 'vpn', label: 'VPN Services' },
+  { slug: 'browser', label: 'Web Browsers' },
+  { slug: 'email', label: 'Email Providers' },
+  { slug: 'messaging', label: 'Messaging Apps' },
+  { slug: 'dns', label: 'DNS Resolvers' },
+  { slug: 'os', label: 'Operating Systems' },
+  { slug: 'search', label: 'Search Engines' },
+];
+
+const totalTools = allTools.length;
+const totalAudited = allTools.filter(
+  (t) => t.data.attributes.auditedThirdParty,
+).length;
+
+const totalOss = allTools.filter((t) => t.data.attributes.openSource).length;
+
+const totalFree = allTools.filter((t) =>
+  ['free', 'open-source'].includes(t.data.pricing.model),
+).length;
+---
+
+<Layout title="Privacy Policy">
+  <div class="main-content">
+    <!-- Header -->
+    <section class="hero">
+      <h1 class="hero__title">Privacy Policy</h1>
+
+      <p class="hero__subtitle">
+        This website provides a structured index of privacy-oriented software.
+        It does not track user behavior, or use advertising or affiliate
+        monetization.
+      </p>
+
+      <div class="hero__stats">
+        <span class="hero__stat"
+          ><strong>{totalTools}</strong> tools referenced</span
+        >
+        <span class="hero__stat"
+          ><strong>{totalOss}</strong> open-source projects</span
+        >
+        <span class="hero__stat"
+          ><strong>{totalAudited}</strong> externally audited entries</span
+        >
+        <span class="hero__stat"
+          ><strong>{totalFree}</strong> free or open-source tools</span
+        >
+      </div>
+    </section>
+
+    <!-- Data collection -->
+    <section class="policy-block">
+      <h2>Data Collection</h2>
+      <p>
+        This site does not collect, store, or process personal user data. No
+        cookies for tracking, or fingerprinting systems are used.
+      </p>
+    </section>
+
+    <!-- Data usage -->
+    <section class="policy-block">
+      <h2>Use of Information</h2>
+      <p>
+        All displayed content is informational and derived from publicly
+        available documentation of listed software projects. No proprietary or
+        private datasets are used.
+      </p>
+    </section>
+
+    <!-- Evaluation methodology -->
+    <section class="policy-block">
+      <h2>Evaluation Methodology</h2>
+      <p>
+        Listed tools are evaluated based on publicly observable characteristics,
+        including:
+      </p>
+
+      <ul>
+        <li>Open-source availability</li>
+        <li>Known telemetry behavior</li>
+        <li>Encryption and security architecture</li>
+        <li>Independently verifiable audits (if available)</li>
+        <li>Network and data handling design</li>
+      </ul>
+
+      <p>
+        Scores and classifications represent comparative analysis and should not
+        be interpreted as guarantees of security or privacy.
+      </p>
+    </section>
+
+    <!-- Limitations -->
+    <section class="policy-block">
+      <h2>Limitations</h2>
+      <p>
+        Privacy and security properties of software may change over time. Users
+        are responsible for independently verifying current security posture
+        before relying on any listed tool.
+      </p>
+    </section>
+
+    <!-- Third-party tools -->
+    <section class="policy-block">
+      <h2>Third-Party Software</h2>
+      <p>
+        This site references third-party software projects. Each project is
+        independent and not controlled by this website. External links are
+        provided for reference only.
+      </p>
+    </section>
+
+    <!-- Contact -->
+    <section class="policy-block">
+      <h2>Contact</h2>
+      <p>
+        This site does not process user accounts or direct submissions. For
+        corrections or updates to listings, contact methods (if provided) are
+        external to this system.
+      </p>
+    </section>
+  </div>
+</Layout>

@@ -1,0 +1,36 @@
+{
+  "slug": "brave",
+  "name": "Brave Browser",
+  "category": "browser",
+  "website": "https://brave.com",
+  "pricing": {
+    "model": "free",
+    "details": "Free. Optional Brave Rewards (BAT token) system is opt-in and unrelated to browsing privacy."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 8.0,
+    "security": 8.5,
+    "usability": 8.5
+  },
+  "tags": [
+    "chromium-based",
+    "open-source",
+    "fingerprint-randomization",
+    "ad-blocking",
+    "tor-windows",
+    "shields"
+  ],
+  "lastReviewed": "2025-11-01",
+  "description": "Chromium-based browser with built-in ad/tracker blocking, fingerprint randomization, and optional Tor-routed private windows. Strong privacy defaults without requiring additional configuration.",
+  "rationale": "Brave provides meaningful privacy improvements over Chrome with no configuration required. Built-in content blocking, fingerprint randomization, and optional Tor routing are above average for a mainstream browser. Based on Chromium, so benefits from Google's security investment. The BAT advertising system is opt-in and does not compromise browsing privacy when disabled. Historical controversies around affiliate link injection have been resolved."
+}

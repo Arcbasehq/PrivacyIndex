@@ -1,0 +1,212 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const auth = Astro.locals.auth();
+if (!auth.userId) return Astro.redirect('/sign-in');
+
+const categories = [
+  { value: 'general',      label: 'General' },
+  { value: 'vpn',          label: 'VPN' },
+  { value: 'browsers',     label: 'Browsers' },
+  { value: 'email',        label: 'Email' },
+  { value: 'messaging',    label: 'Messaging' },
+  { value: 'os',           label: 'OS & Devices' },
+  { value: 'threat_model', label: 'Threat Model' },
+  { value: 'tools',        label: 'Tools' },
+];
+---
+
+<Layout title="New Thread — Discuss">
+  <div class="main-content">
+
+    <div class="nt-header">
+      <a href="/discuss" class="nt-back">
+        <i class="fa-solid fa-arrow-left"></i> Back to Discuss
+      </a>
+      <h1 class="nt-title">Start a new thread</h1>
+    </div>
+
+    <form class="nt-form" id="new-thread-form">
+      <div class="nt-field">
+        <label class="nt-label" for="title">Title</label>
+        <input
+          class="nt-input"
+          id="title"
+          name="title"
+          type="text"
+          placeholder="What do you want to discuss?"
+          maxlength="120"
+          required
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="nt-field">
+        <label class="nt-label" for="category">Category</label>
+        <select class="nt-input nt-select" id="category" name="category">
+          {categories.map(c => <option value={c.value}>{c.label}</option>)}
+        </select>
+      </div>
+
+      <div class="nt-field">
+        <label class="nt-label" for="body">Body</label>
+        <textarea
+          class="nt-input nt-textarea"
+          id="body"
+          name="body"
+          placeholder="Share your thoughts, question, or experience..."
+          rows={8}
+          required
+        ></textarea>
+      </div>
+
+      <div class="nt-actions">
+        <a href="/discuss" class="nt-btn nt-btn--ghost">Cancel</a>
+        <button type="submit" class="nt-btn nt-btn--primary" id="submit-btn">
+          <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+          Post thread
+        </button>
+      </div>
+
+      <div class="nt-error" id="nt-error" style="display:none;"></div>
+    </form>
+
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById('new-thread-form') as HTMLFormElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const errorEl = document.getElementById('nt-error') as HTMLElement;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Posting…';
+    errorEl.style.display = 'none';
+
+    const data = {
+      title: (form.elements.namedItem('title') as HTMLInputElement).value,
+      body: (form.elements.namedItem('body') as HTMLTextAreaElement).value,
+      category: (form.elements.namedItem('category') as HTMLSelectElement).value,
+    };
+
+    try {
+      const res = await fetch('/api/discuss/threads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? 'Failed to create thread');
+      window.location.href = `/discuss/${json.slug}`;
+    } catch (err: any) {
+      errorEl.textContent = err.message;
+      errorEl.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Post thread';
+    }
+  });
+</script>
+
+<style>
+  .nt-header {
+    margin-bottom: 1.5rem;
+  }
+  .nt-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    color: var(--clr-muted);
+    text-decoration: none;
+    margin-bottom: 0.875rem;
+  }
+  .nt-back:hover { color: var(--clr-text-secondary); }
+
+  .nt-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--clr-text);
+  }
+
+  .nt-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.125rem;
+    max-width: 680px;
+  }
+
+  .nt-field { display: flex; flex-direction: column; gap: 0.375rem; }
+
+  .nt-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--clr-muted);
+  }
+
+  .nt-input {
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border-strong);
+    border-radius: var(--radius);
+    color: var(--clr-text);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    padding: 0.625rem 0.875rem;
+    transition: border-color 0.1s;
+    width: 100%;
+  }
+  .nt-input:focus {
+    outline: none;
+    border-color: #5c6bc0;
+  }
+  .nt-input::placeholder { color: var(--clr-muted-light); }
+
+  .nt-select { appearance: none; cursor: pointer; }
+  .nt-textarea { resize: vertical; line-height: 1.6; }
+
+  .nt-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .nt-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    padding: 0.5rem 1.125rem;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.1s;
+    font-family: var(--font-sans);
+  }
+  .nt-btn--primary {
+    background: #5c6bc0;
+    color: #fff;
+  }
+  .nt-btn--primary:hover { background: #4a59b0; }
+  .nt-btn--primary:disabled { opacity: 0.6; cursor: not-allowed; }
+  .nt-btn--ghost {
+    background: var(--clr-surface);
+    color: var(--clr-text-secondary);
+    border: 1px solid var(--clr-border-strong);
+  }
+  .nt-btn--ghost:hover { background: var(--clr-surface-alt); }
+
+  .nt-error {
+    font-size: 0.8125rem;
+    color: var(--clr-score-low);
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.2);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.75rem;
+  }
+</style>

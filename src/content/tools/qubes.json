@@ -1,0 +1,36 @@
+{
+  "slug": "qubes",
+  "name": "Qubes OS",
+  "category": "os",
+  "website": "https://www.qubes-os.org",
+  "pricing": {
+    "model": "free",
+    "details": "Free and open source."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": true,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": false,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 9.0,
+    "security": 9.5,
+    "usability": 5.5
+  },
+  "tags": [
+    "compartmentalization",
+    "xen-hypervisor",
+    "open-source",
+    "audited",
+    "vm-isolation",
+    "disposable-vms"
+  ],
+  "lastReviewed": "2025-10-01",
+  "description": "Security-by-compartmentalization operating system using Xen hypervisor to isolate different activities in separate VMs. Applications run in disposable or persistent VMs that cannot access each other.",
+  "rationale": "Qubes OS provides the strongest security isolation model of any desktop operating system. Each application domain (qube) is an isolated VM. A compromise in one qube — e.g., a malicious PDF exploit in a document viewer qube — cannot propagate to other qubes or the host. Whonix can be integrated as a network qube for anonymous Tor-routed traffic. Hardware requirements are significant (8GB+ RAM, VT-d support). Usability is substantially lower than mainstream desktop OSes. Security score reflects the isolation architecture; privacy score reflects that networking is still configurable and dependent on qube configuration."
+}

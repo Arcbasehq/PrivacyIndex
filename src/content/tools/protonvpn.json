@@ -1,0 +1,37 @@
+{
+  "slug": "protonvpn",
+  "name": "Proton VPN",
+  "category": "vpn",
+  "website": "https://protonvpn.com",
+  "pricing": {
+    "model": "freemium",
+    "details": "Free tier with limited servers. Paid plans from $4.99/month (annual). Bundled with Proton Mail."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": true,
+    "noLogsPolicy": true,
+    "anonymousSignup": false,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 8.5,
+    "security": 9.0,
+    "usability": 8.5
+  },
+  "tags": [
+    "wireguard",
+    "openvpn",
+    "no-logs",
+    "open-source",
+    "audited",
+    "stealth-protocol",
+    "swiss-jurisdiction"
+  ],
+  "lastReviewed": "2025-11-01",
+  "description": "VPN service operated by Proton AG, a Swiss company subject to Swiss privacy law. Offers a free tier with no data limits, and paid plans with extended server access.",
+  "rationale": "Proton's Swiss incorporation provides meaningful jurisdictional protection. Client applications are open source and have received third-party audits. The free tier is functional and not artificially limited by speed or data caps — unusual in the VPN market. Email is required for account creation, which is a minor privacy trade-off relative to Mullvad."
+}

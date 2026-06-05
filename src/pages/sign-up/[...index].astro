@@ -1,0 +1,10 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { SignUp } from '@clerk/astro/components';
+---
+
+<Layout title="Get Started">
+  <div class="main-content" style="display:flex; justify-content:center; padding-top:4rem;">
+    <SignUp signInUrl="/sign-in" fallbackRedirectUrl="/dashboard" />
+  </div>
+</Layout>

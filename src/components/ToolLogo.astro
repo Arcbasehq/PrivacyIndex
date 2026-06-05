@@ -1,0 +1,105 @@
+---
+import * as si from 'simple-icons';
+
+interface Props {
+  slug: string;
+  name: string;
+  category: string;
+  size?: number;
+}
+
+const { slug, name, size = 22 } = Astro.props;
+
+// Map tool slug → simple-icons key + override brand color
+const iconMap: Record<string, { key: string; color: string }> = {
+  mullvad: { key: 'siMullvad', color: '#ea5300' },
+  protonvpn: { key: 'siProtonvpn', color: '#6d4aff' },
+  ivpn: { key: 'siIvpn', color: '#0fac5c' },
+  windscribe: { key: 'siWindscribe', color: '#55b9f3' },
+
+  firefox: { key: 'siFirefox', color: '#ff7139' },
+  brave: { key: 'siBrave', color: '#fb542b' },
+  librewolf: { key: 'siLibrewolf', color: '#00acff' },
+  torbrowser: { key: 'siTorproject', color: '#7e4798' },
+
+  protonmail: { key: 'siProtonmail', color: '#6d4aff' },
+  tuta: { key: 'siTuta', color: '#c40018' },
+  simplelogin: { key: 'siSimplelogin', color: '#e94135' },
+  fastmail: { key: 'siFastmail', color: '#016fce' },
+
+  signal: { key: 'siSignal', color: '#3a76f0' },
+  element: { key: 'siElement', color: '#0dbd8b' },
+  briar: { key: 'siBriar', color: '#34873e' },
+  session: { key: 'siSession', color: '#00f782' },
+
+  nextdns: { key: 'siNextdns', color: '#007eff' },
+  quad9: { key: 'siQuad9', color: '#282c5e' },
+  adguarddns: { key: 'siAdguard', color: '#67b279' },
+
+  dnscrypt: { key: 'siDnscrypt', color: '#4c4c4c' },
+
+  tails: { key: 'siTails', color: '#56347c' },
+  whonix: { key: 'siWhonix', color: '#0077b6' },
+  qubes: { key: 'siQubesos', color: '#63a0ff' },
+  fedora: { key: 'siFedora', color: '#294172' },
+
+  bravesearch: { key: 'siBrave', color: '#fb542b' },
+  duckduckgo: { key: 'siDuckduckgo', color: '#de5833' },
+  searxng: { key: 'siSearxng', color: '#3050c0' },
+  startpage: { key: 'siStartpage', color: '#ff8b00' },
+  libresearch: { key: 'siLibreddit', color: '#4080ff' },
+};
+const entry = iconMap[slug];
+const icon = entry
+  ? (si as Record<string, { svg: string; hex: string }>)[entry.key]
+  : null;
+const color = entry?.color ?? '#8b929e';
+const svg = icon?.svg ?? null;
+const initials = name
+  .split(' ')
+  .map((w: string) => w[0])
+  .join('')
+  .slice(0, 2)
+  .toUpperCase();
+---
+
+{
+  svg ? (
+    <span
+      class="tool-logo-icon"
+      style={`color: #${icon!.hex || color.replace('#', '')};`}
+      set:html={svg}
+      aria-hidden="true"
+    />
+  ) : (
+    <span
+      class="tool-logo-initials"
+      style={`color: ${color};`}
+      aria-hidden="true"
+    >
+      {initials}
+    </span>
+  )
+}
+
+<style define:vars={{ size: size + 'px' }}>
+  .tool-logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size);
+    height: var(--size);
+    flex-shrink: 0;
+  }
+  .tool-logo-icon :global(svg) {
+    width: var(--size);
+    height: var(--size);
+    fill: currentColor;
+  }
+  .tool-logo-initials {
+    font-size: calc(var(--size) * 0.45);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+</style>

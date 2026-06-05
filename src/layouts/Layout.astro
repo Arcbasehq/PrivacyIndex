@@ -1,0 +1,933 @@
+---
+import '../styles/global.css';
+import CategoryIcon from '../components/CategoryIcon.astro';
+import { UserButton } from '@clerk/astro/components';
+
+interface Props {
+  title?: string;
+  description?: string;
+  activeCategory?: string;
+}
+
+const {
+  title = 'Privacy Index',
+  description = 'A structured reference for evaluating privacy and security software. Scored on measurable criteria.',
+  activeCategory,
+} = Astro.props;
+
+const { userId } = Astro.locals.auth?.() ?? {};
+
+const categories = [
+  {
+    slug: 'vpn',
+    label: 'VPN Services',
+    color: 'var(--cat)',
+    bg: 'var(--cat-vpn-light)',
+  },
+  {
+    slug: 'browser',
+    label: 'Web Browsers',
+    color: 'var(--cat)',
+    bg: 'var(--cat-browser-light)',
+  },
+  {
+    slug: 'email',
+    label: 'Email Providers',
+    color: 'var(--cat)',
+    bg: 'var(--cat-email-light)',
+  },
+  {
+    slug: 'messaging',
+    label: 'Messaging Apps',
+    color: 'var(--cat)',
+    bg: 'var(--cat-messaging-light)',
+  },
+  {
+    slug: 'dns',
+    label: 'DNS Resolvers',
+    color: 'var(--cat)',
+    bg: 'var(--cat-dns-light)',
+  },
+  {
+    slug: 'os',
+    label: 'Operating Systems',
+    color: 'var(--cat)',
+    bg: 'var(--cat-os-light)',
+  },
+  {
+    slug: 'search',
+    label: 'Search Engines',
+    color: 'var(--cat)',
+    bg: 'var(--cat-search-light)',
+  },
+];
+
+const pageTitle =
+  title === 'Privacy Index' ? title : `${title} — Privacy Index`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+    <link rel="icon" href="/logo1.png" type="image/svg+xml" />
+    <link
+      rel="canonical"
+      href={`https://privacyindex.xyz${Astro.url.pathname}`}
+    />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="Privacy Index" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content={`https://privacyindex.xyz${Astro.url.pathname}`}
+    />
+    <meta property="og:image" content="https://privacyindex.xyz/og.png" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://privacyindex.xyz/og.png" />
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="b4c11e9f-fdf8-4578-bc39-74a86b5fa256"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <!-- ── Top Header ── -->
+      <header class="top-header">
+        <div class="top-header__left">
+          <a href="/" class="top-header__logo">
+            <img
+              src="/logo.png"
+              class="top-header__logo-mark"
+              aria-hidden="true"
+              alt="PrivacyIndex Logo"
+            />
+          </a>
+        </div>
+
+        <span class="top-header__divider"></span>
+
+        <div class="top-header__search" style="position: relative;">
+          <span class="top-header__search-icon">
+            <i
+              class="fa-solid fa-magnifying-glass"
+              style="font-size: 11px;"
+              aria-hidden="true"></i>
+          </span>
+          <input
+            type="search"
+            class="top-header__search-input"
+            placeholder="Search tools…"
+            id="global-search"
+            autocomplete="off"
+            role="combobox"
+            aria-expanded="false"
+            aria-controls="search-dropdown"
+            aria-autocomplete="list"
+          />
+          <div class="search-dropdown" id="search-dropdown" role="listbox">
+          </div>
+        </div>
+        <div class="search-overlay" id="search-overlay"></div>
+
+        <div class="top-header__right" id="header-auth">
+          <!-- Signed-out state (default, swapped client-side if logged in) -->
+          <a href="/sign-in" class="top-header__btn" id="btn-signin">
+            <i
+              class="fa-solid fa-right-to-bracket"
+              style="font-size: 11px;"
+              aria-hidden="true"></i>
+            Sign in
+          </a>
+          <a href="/sign-up" class="header-cta-btn" id="btn-signup">
+            <i
+              class="fa-solid fa-user-plus"
+              style="font-size: 11px;"
+              aria-hidden="true"></i>
+            Get started
+          </a>
+          <!-- Signed-in state (hidden until JS confirms session) -->
+          <a
+            href="/dashboard"
+            class="top-header__btn"
+            id="btn-dashboard"
+            style="display:none;"
+          >
+            <i
+              class="fa-solid fa-gauge"
+              style="font-size: 11px;"
+              aria-hidden="true"></i>
+            Dashboard
+          </a>
+          <UserButton />
+        </div>
+      </header>
+
+      <!-- ── Body ── -->
+      <div class="app-body">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar">
+          <nav class="sidebar-nav">
+            <!-- Overview -->
+            <div class="sidebar-nav__section">
+              <a
+                href="/"
+                class={`sidebar-nav__item ${!activeCategory ? 'sidebar-nav__item--active' : ''}`}
+                style="--cat-color:#8b929e;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-grip" aria-hidden="true"></i></span
+                >Overview
+              </a>
+            </div>
+
+            <!-- Browsing & Networks -->
+            <div class="sidebar-nav__section">
+              <div class="sidebar-nav__heading">Browsing</div>
+              <a
+                href="/privacy-vpn"
+                class="sidebar-nav__item"
+                style="--cat-color:#2dd4bf;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-shield-halved" aria-hidden="true"
+                  ></i></span
+                >VPN Services
+              </a>
+              <a
+                href="/private-browser"
+                class="sidebar-nav__item"
+                style="--cat-color:#60a5fa;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-globe" aria-hidden="true"></i></span
+                >Web Browsers
+              </a>
+              <a
+                href="/privacy-browser-addons"
+                class="sidebar-nav__item"
+                style="--cat-color:#60a5fa;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-puzzle-piece" aria-hidden="true"
+                  ></i></span
+                >Browser Addons
+              </a>
+              <a
+                href="/private-search"
+                class="sidebar-nav__item"
+                style="--cat-color:#a78bfa;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-magnifying-glass" aria-hidden="true"
+                  ></i></span
+                >Search Engines
+              </a>
+              <a
+                href="/anonymizing-networks"
+                class="sidebar-nav__item"
+                style="--cat-color:#2dd4bf;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-user-secret" aria-hidden="true"
+                  ></i></span
+                >Anonymizing Networks
+              </a>
+            </div>
+
+            <!-- Identity -->
+            <div class="sidebar-nav__section">
+              <div class="sidebar-nav__heading">Identity</div>
+              <a
+                href="/secure-password-manager"
+                class="sidebar-nav__item"
+                style="--cat-color:#f87171;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-key" aria-hidden="true"></i></span
+                >Password Managers
+              </a>
+              <a
+                href="/two-factor-authentication-2fa"
+                class="sidebar-nav__item"
+                style="--cat-color:#f87171;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-mobile-screen" aria-hidden="true"
+                  ></i></span
+                >Two-Factor Auth
+              </a>
+              <a
+                href="/privacy-email"
+                class="sidebar-nav__item"
+                style="--cat-color:#f87171;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-envelope" aria-hidden="true"></i></span
+                >Email Providers
+              </a>
+              <a
+                href="/email-client"
+                class="sidebar-nav__item"
+                style="--cat-color:#f87171;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-inbox" aria-hidden="true"></i></span
+                >Email Clients
+              </a>
+            </div>
+
+            <!-- Communication -->
+            <div class="sidebar-nav__section">
+              <div class="sidebar-nav__heading">Communication</div>
+              <a
+                href="/encrypted-messaging"
+                class="sidebar-nav__item"
+                style="--cat-color:#34d399;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-comments" aria-hidden="true"></i></span
+                >Messaging Apps
+              </a>
+              <a
+                href="/chat"
+                class="sidebar-nav__item"
+                style="--cat-color:#34d399;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-message" aria-hidden="true"></i></span
+                >Chat Platforms
+              </a>
+              <a
+                href="/tor-messaging"
+                class="sidebar-nav__item"
+                style="--cat-color:#34d399;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-circle-nodes" aria-hidden="true"
+                  ></i></span
+                >Tor Messaging
+              </a>
+              <a
+                href="/encrypted-voip"
+                class="sidebar-nav__item"
+                style="--cat-color:#34d399;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-phone" aria-hidden="true"></i></span
+                >VoIP
+              </a>
+              <a
+                href="/private-translations"
+                class="sidebar-nav__item"
+                style="--cat-color:#34d399;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-language" aria-hidden="true"></i></span
+                >Translation
+              </a>
+              <a
+                href="/decentralized-social"
+                class="sidebar-nav__item"
+                style="--cat-color:#34d399;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-diagram-project" aria-hidden="true"
+                  ></i></span
+                >Decentralized Social
+              </a>
+              <a
+                href="/blogs"
+                class="sidebar-nav__item"
+                style="--cat-color:#34d399;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-pen-nib" aria-hidden="true"></i></span
+                >Blogs
+              </a>
+            </div>
+
+            <!-- Files & Storage -->
+            <div class="sidebar-nav__section">
+              <div class="sidebar-nav__heading">Files & Storage</div>
+              <a
+                href="/secure-file-encryption"
+                class="sidebar-nav__item"
+                style="--cat-color:#fb923c;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-lock" aria-hidden="true"></i></span
+                >File Encryption
+              </a>
+              <a
+                href="/file-sharing-sync"
+                class="sidebar-nav__item"
+                style="--cat-color:#fb923c;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-share-nodes" aria-hidden="true"
+                  ></i></span
+                >File Sharing & Sync
+              </a>
+              <a
+                href="/encrypted-cloud-storage"
+                class="sidebar-nav__item"
+                style="--cat-color:#fb923c;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-cloud" aria-hidden="true"></i></span
+                >Cloud Storage
+              </a>
+              <a
+                href="/encrypted-photo-storage"
+                class="sidebar-nav__item"
+                style="--cat-color:#fb923c;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-images" aria-hidden="true"></i></span
+                >Photo Storage
+              </a>
+              <a
+                href="/encrypted-notebooks"
+                class="sidebar-nav__item"
+                style="--cat-color:#fb923c;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-pen" aria-hidden="true"></i></span
+                >Notebooks
+              </a>
+              <a
+                href="/encrypted-calendars"
+                class="sidebar-nav__item"
+                style="--cat-color:#fb923c;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-calendar" aria-hidden="true"></i></span
+                >Calendars
+              </a>
+              <a
+                href="/productivity"
+                class="sidebar-nav__item"
+                style="--cat-color:#fb923c;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-briefcase" aria-hidden="true"
+                  ></i></span
+                >Productivity
+              </a>
+            </div>
+
+            <!-- System -->
+            <div class="sidebar-nav__section">
+              <div class="sidebar-nav__heading">System</div>
+              <a
+                href="/os"
+                class="sidebar-nav__item"
+                style="--cat-color:#94a3b8;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-laptop-code" aria-hidden="true"
+                  ></i></span
+                >Operating Systems
+              </a>
+              <a
+                href="/windows"
+                class="sidebar-nav__item"
+                style="--cat-color:#94a3b8;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-brands fa-windows" aria-hidden="true"></i></span
+                >Windows
+              </a>
+              <a
+                href="/android-alternatives"
+                class="sidebar-nav__item"
+                style="--cat-color:#94a3b8;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-brands fa-android" aria-hidden="true"></i></span
+                >Mobile OS
+              </a>
+              <a
+                href="/android-keyboard"
+                class="sidebar-nav__item"
+                style="--cat-color:#94a3b8;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-keyboard" aria-hidden="true"></i></span
+                >Android Keyboards
+              </a>
+              <a
+                href="/encrypted-dns"
+                class="sidebar-nav__item"
+                style="--cat-color:#94a3b8;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-server" aria-hidden="true"></i></span
+                >DNS Resolvers
+              </a>
+              <a
+                href="/open-source-router-firmware"
+                class="sidebar-nav__item"
+                style="--cat-color:#94a3b8;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-wifi" aria-hidden="true"></i></span
+                >Router Firmware
+              </a>
+            </div>
+
+            <!-- Internet -->
+            <div class="sidebar-nav__section">
+              <div class="sidebar-nav__heading">Internet</div>
+              <a
+                href="/open-source-torrent-clients"
+                class="sidebar-nav__item"
+                style="--cat-color:#a78bfa;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i
+                    class="fa-solid fa-arrow-right-arrow-left"
+                    aria-hidden="true"></i></span
+                >Torrent Clients
+              </a>
+              <a
+                href="/privacy-rss-feed-readers"
+                class="sidebar-nav__item"
+                style="--cat-color:#a78bfa;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-rss" aria-hidden="true"></i></span
+                >RSS Readers
+              </a>
+              <a
+                href="/world-maps"
+                class="sidebar-nav__item"
+                style="--cat-color:#a78bfa;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-map" aria-hidden="true"></i></span
+                >World Maps
+              </a>
+              <a
+                href="/privacy-frontends"
+                class="sidebar-nav__item"
+                style="--cat-color:#a78bfa;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-layer-group" aria-hidden="true"
+                  ></i></span
+                >Privacy Frontends
+              </a>
+              <a
+                href="/youtube-alternatives"
+                class="sidebar-nav__item"
+                style="--cat-color:#a78bfa;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-video" aria-hidden="true"></i></span
+                >Video Platforms
+              </a>
+              <a
+                href="/disk-file-cleaner"
+                class="sidebar-nav__item"
+                style="--cat-color:#a78bfa;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-broom" aria-hidden="true"></i></span
+                >Disk Cleaners
+              </a>
+            </div>
+
+            <!-- Finance -->
+            <div class="sidebar-nav__section">
+              <div class="sidebar-nav__heading">Finance</div>
+              <a
+                href="/crypto"
+                class="sidebar-nav__item"
+                style="--cat-color:#fbbf24;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-coins" aria-hidden="true"></i></span
+                >Cryptocurrency
+              </a>
+              <a
+                href="/bitcoin"
+                class="sidebar-nav__item"
+                style="--cat-color:#fbbf24;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-brands fa-bitcoin" aria-hidden="true"></i></span
+                >Bitcoin
+              </a>
+              <a
+                href="/monero"
+                class="sidebar-nav__item"
+                style="--cat-color:#fbbf24;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i
+                    class="fa-solid fa-circle-dollar-to-slot"
+                    aria-hidden="true"></i></span
+                >Monero
+              </a>
+            </div>
+
+            <!-- Reference -->
+            <div class="sidebar-nav__section">
+              <div class="sidebar-nav__heading">Reference</div>
+              <a
+                href="/secure-hosting-domain"
+                class="sidebar-nav__item"
+                style="--cat-color:#8b929e;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-server" aria-hidden="true"></i></span
+                >Hosting & Domains
+              </a>
+              <a
+                href="/secure-whistleblower"
+                class="sidebar-nav__item"
+                style="--cat-color:#8b929e;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-bullhorn" aria-hidden="true"></i></span
+                >Whistleblowing
+              </a>
+              <a
+                href="/gag/"
+                class="sidebar-nav__item"
+                style="--cat-color:#8b929e;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-gavel" aria-hidden="true"></i></span
+                >Gag Orders
+              </a>
+              <a
+                href="/methodology"
+                class="sidebar-nav__item"
+                style="--cat-color:#8b929e;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-book-open" aria-hidden="true"
+                  ></i></span
+                >Methodology
+              </a>
+              <a
+                href="/about"
+                class="sidebar-nav__item"
+                style="--cat-color:#8b929e;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-circle-info" aria-hidden="true"
+                  ></i></span
+                >About
+              </a>
+              <a
+                href="/privacy"
+                class="sidebar-nav__item"
+                style="--cat-color:#8b929e;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-shield-halved" aria-hidden="true"
+                  ></i></span
+                >Privacy Policy
+              </a>
+              <a
+                href="/discuss"
+                class="sidebar-nav__item"
+                style="--cat-color:#818cf8;"
+              >
+                <span class="sidebar-nav__icon"
+                  ><i class="fa-solid fa-comments" aria-hidden="true"></i></span
+                >Discuss
+              </a>
+            </div>
+          </nav>
+        </aside>
+
+        <!-- Main -->
+        <div class="main-wrap">
+          <main>
+            <slot />
+          </main>
+
+          <footer class="site-footer">
+            <div class="site-footer__inner">
+              <p class="site-footer__note">
+                <i
+                  class="fa-solid fa-shield-halved"
+                  style="margin-right: 0.375rem; opacity: 0.5;"
+                  aria-hidden="true"></i>
+                Privacy Index — Independently curated. No affiliate links. No sponsored
+                placements.
+              </p>
+              <div class="site-footer__links">
+                <a
+                  href="https://github.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="top-header__btn"
+                >
+                  <i
+                    class="fa-brands fa-github"
+                    style="font-size: 13px;"
+                    aria-hidden="true"></i>
+                </a>
+                <a href="/methodology" class="top-header__btn">
+                  <i
+                    class="fa-solid fa-book-open"
+                    style="font-size: 12px;"
+                    aria-hidden="true"></i>
+                </a>
+                <a href="/about" class="top-header__btn">
+                  <i
+                    class="fa-solid fa-circle-info"
+                    style="font-size: 12px;"
+                    aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </footer>
+
+          <!-- Big Brother banner -->
+          <div class="bb-banner">
+            <img
+              src="/big_brother.jpg"
+              alt=""
+              class="bb-banner__img"
+              aria-hidden="true"
+            />
+            <div class="bb-banner__overlay"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const catColors: Record<string, string> = {
+        vpn: '#2dd4bf',
+        browser: '#38bdf8',
+        email: '#f87171',
+        messaging: '#4ade80',
+        dns: '#fb923c',
+        os: '#94a3b8',
+        search: '#60a5fa',
+      };
+      const catBgs: Record<string, string> = {
+        vpn: 'rgba(45,212,191,0.12)',
+        browser: 'rgba(56,189,248,0.12)',
+        email: 'rgba(248,113,113,0.12)',
+        messaging: 'rgba(74,222,128,0.12)',
+        dns: 'rgba(251,146,60,0.12)',
+        os: 'rgba(148,163,184,0.12)',
+        search: 'rgba(96,165,250,0.12)',
+      };
+
+      type Tool = {
+        slug: string;
+        name: string;
+        category: string;
+        description: string;
+        tags: string[];
+        pricing: string;
+        scores: { privacy: number; security: number; usability: number };
+      };
+
+      let index: Tool[] = [];
+      let activeIdx = -1;
+
+      const input = document.getElementById(
+        'global-search',
+      ) as HTMLInputElement;
+      const dropdown = document.getElementById(
+        'search-dropdown',
+      ) as HTMLDivElement;
+      const overlay = document.getElementById(
+        'search-overlay',
+      ) as HTMLDivElement;
+
+      async function loadIndex() {
+        if (index.length) return;
+        try {
+          const res = await fetch('/search-index.json');
+          index = await res.json();
+        } catch {}
+      }
+
+      function highlight(text: string, query: string): string {
+        if (!query) return text;
+        const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return text.replace(
+          new RegExp(`(${escaped})`, 'gi'),
+          '<mark>$1</mark>',
+        );
+      }
+
+      function openDropdown(results: Tool[], query: string) {
+        activeIdx = -1;
+        if (!results.length) {
+          dropdown.innerHTML = `<div class="search-dropdown__empty"><i class="fa-solid fa-circle-xmark" style="margin-right:0.375rem;"></i>No tools found for "${query}"</div>`;
+        } else {
+          dropdown.innerHTML = results
+            .map((t, i) => {
+              const initials = t.name
+                .split(' ')
+                .map((w) => w[0])
+                .join('')
+                .slice(0, 2)
+                .toUpperCase();
+              const color = catColors[t.category] ?? '#8b929e';
+              const bg = catBgs[t.category] ?? 'rgba(139,146,158,0.12)';
+              const logoSrc = `https://logo.clearbit.com/${t.slug === 'torbrowser' ? 'torproject.org' : t.slug === 'adguarddns' ? 'adguard.com' : t.slug === 'bravesearch' ? 'brave.com' : t.slug === 'dnscrypt' ? 'dnscrypt.info' : t.slug === 'libresearch' ? 'libresearch.ca' : t.slug + '.com'}`;
+              return `
+            <a
+              class="search-result"
+              href="/tool/${t.slug}"
+              data-idx="${i}"
+              role="option"
+            >
+              <div class="search-result__icon" style="background:${bg};color:${color};overflow:hidden;">
+                <img src="${logoSrc}" width="20" height="20" style="object-fit:contain;border-radius:3px;" onerror="this.style.display='none';this.nextSibling.style.display='inline';" /><span style="display:none;font-size:0.6875rem;font-weight:800;">${initials}</span>
+              </div>
+              <div class="search-result__body">
+                <div class="search-result__name">${highlight(t.name, query)}</div>
+                <div class="search-result__meta">${t.category.toUpperCase()} · ${t.pricing} · ${highlight(t.tags.slice(0, 3).join(', '), query)}</div>
+              </div>
+              <div class="search-result__score">${t.scores.privacy.toFixed(1)}</div>
+            </a>`;
+            })
+            .join('');
+        }
+        dropdown.classList.add('search-dropdown--open');
+        overlay.classList.add('search-overlay--open');
+        input.setAttribute('aria-expanded', 'true');
+      }
+
+      function closeDropdown() {
+        dropdown.classList.remove('search-dropdown--open');
+        overlay.classList.remove('search-overlay--open');
+        input.setAttribute('aria-expanded', 'false');
+        activeIdx = -1;
+      }
+
+      function updateActive(results: HTMLElement[]) {
+        results.forEach((el, i) => {
+          el.classList.toggle('search-result--active', i === activeIdx);
+          if (i === activeIdx) el.scrollIntoView({ block: 'nearest' });
+        });
+      }
+
+      input.addEventListener('focus', loadIndex);
+
+      input.addEventListener('input', () => {
+        const q = input.value.trim().toLowerCase();
+        if (!q) {
+          closeDropdown();
+          return;
+        }
+
+        const results = index
+          .filter(
+            (t) =>
+              t.name.toLowerCase().includes(q) ||
+              t.description.toLowerCase().includes(q) ||
+              t.category.includes(q) ||
+              t.tags.some((tag) => tag.includes(q)),
+          )
+          .slice(0, 8);
+
+        openDropdown(results, q);
+      });
+
+      input.addEventListener('keydown', (e) => {
+        const items = Array.from(
+          dropdown.querySelectorAll<HTMLElement>('.search-result'),
+        );
+        if (!items.length) return;
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          activeIdx = Math.min(activeIdx + 1, items.length - 1);
+          updateActive(items);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          activeIdx = Math.max(activeIdx - 1, -1);
+          updateActive(items);
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (activeIdx >= 0 && items[activeIdx]) {
+            (items[activeIdx] as HTMLAnchorElement).click();
+          } else if (items[0]) {
+            (items[0] as HTMLAnchorElement).click();
+          }
+        } else if (e.key === 'Escape') {
+          closeDropdown();
+          input.blur();
+        }
+      });
+
+      overlay.addEventListener('click', closeDropdown);
+    </script>
+
+    <script>
+      // Swap header auth buttons based on Clerk session state.
+      // Clerk sets a __session cookie when logged in; we also use
+      // window.Clerk for a reliable check once the SDK loads.
+      function applyAuthState(signedIn: boolean) {
+        const signin = document.getElementById('btn-signin');
+        const signup = document.getElementById('btn-signup');
+        const dash = document.getElementById('btn-dashboard');
+        if (!signin || !signup || !dash) return;
+
+        if (signedIn) {
+          signin.style.display = 'none';
+          signup.style.display = 'none';
+          dash.style.display = 'inline-flex';
+        } else {
+          signin.style.display = '';
+          signup.style.display = '';
+          dash.style.display = 'none';
+        }
+      }
+
+      // Fast check via Clerk session cookie (available synchronously)
+      const hasSessionCookie = document.cookie
+        .split(';')
+        .some(
+          (c) =>
+            c.trim().startsWith('__session=') ||
+            c.trim().startsWith('__client_uat='),
+        );
+      if (hasSessionCookie) applyAuthState(true);
+
+      // Authoritative check once Clerk SDK has loaded
+      window.addEventListener('load', () => {
+        const poll = setInterval(() => {
+          const w = window as any;
+          if (w.Clerk?.loaded) {
+            clearInterval(poll);
+            applyAuthState(!!w.Clerk.user);
+            // Keep in sync if user signs out/in without a page reload
+            w.Clerk.addListener(({ user }: { user: unknown }) => {
+              applyAuthState(!!user);
+            });
+          }
+        }, 50);
+        // Give up after 5 s to avoid infinite polling
+        setTimeout(() => clearInterval(poll), 5000);
+      });
+    </script>
+  </body>
+</html>

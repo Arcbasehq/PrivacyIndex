@@ -1,0 +1,350 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { guidePages } from '../data/guide-pages';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return guidePages.map((page) => ({
+    params: { guide: page.slug },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+
+function scoreClass(tag: string) {
+  const good = [
+    'Open Source',
+    'Audited',
+    'No Logs',
+    'E2E',
+    'E2E Encrypted',
+    'Zero Knowledge',
+    'No Account',
+    'Offline',
+    'Self-Hostable',
+    'Self-Hosted',
+    'Forward Secrecy',
+    'Tor',
+    'Non-Custodial',
+  ];
+  return good.includes(tag) ? 'tool-tag--good' : 'tool-tag--info';
+}
+---
+
+<Layout title={page.title} description={page.description}>
+  <div class="main-content">
+    <div class="breadcrumb">
+      <a href="/">Privacy Index</a>
+      <span class="breadcrumb__sep">/</span>
+      <span>{page.category}</span>
+      <span class="breadcrumb__sep">/</span>
+      <span>{page.title}</span>
+    </div>
+
+    <div class="page-header">
+      <div class="page-header__eyebrow" style={`color: ${page.color};`}>
+        <i class={`fa-solid ${page.icon}`} aria-hidden="true"></i>
+        {page.category}
+      </div>
+      <h1 class="page-header__title">{page.title}</h1>
+      <p class="page-header__desc">{page.description}</p>
+    </div>
+
+    <div class="guide-layout">
+      <div class="guide-body">
+        <!-- Introduction -->
+        <section class="guide-section">
+          <p class="guide-intro">{page.intro}</p>
+        </section>
+
+        <!-- Criteria -->
+        {
+          page.criteria.length > 0 && (
+            <section class="guide-section">
+              <h2 class="guide-section__title">
+                <i class="fa-solid fa-list-check" aria-hidden="true" />
+                Evaluation criteria
+              </h2>
+              <ul class="guide-criteria">
+                {page.criteria.map((c) => (
+                  <li class="guide-criteria__item">
+                    <i class="fa-solid fa-check" aria-hidden="true" />
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        <!-- Tools -->
+        <section class="guide-section">
+          <h2 class="guide-section__title">
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
+            Recommended tools
+          </h2>
+          <div class="guide-tools">
+            {
+              page.tools.map((tool) => (
+                <div class="guide-tool">
+                  <div class="guide-tool__header">
+                    <a
+                      href={tool.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="guide-tool__name"
+                    >
+                      {tool.name}
+                      <i
+                        class="fa-solid fa-arrow-up-right-from-square"
+                        style="font-size: 0.6rem; opacity: 0.5;"
+                        aria-hidden="true"
+                      />
+                    </a>
+                    <div class="guide-tool__tags">
+                      {tool.tags.map((tag) => (
+                        <span class={`tool-tag ${scoreClass(tag)}`}>{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <p class="guide-tool__desc">{tool.description}</p>
+                </div>
+              ))
+            }
+          </div>
+        </section>
+
+        <!-- Note -->
+        {
+          page.note && (
+            <section class="guide-section">
+              <div class="guide-note">
+                <i
+                  class="fa-solid fa-triangle-exclamation"
+                  aria-hidden="true"
+                />
+                <p>{page.note}</p>
+              </div>
+            </section>
+          )
+        }
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="guide-sidebar">
+        <div class="sidebar-card">
+          <div class="sidebar-card__header">
+            <i class="fa-solid fa-compass" aria-hidden="true"></i>
+            {page.category}
+          </div>
+          <div class="sidebar-card__body" style="padding: 0;">
+            {
+              guidePages
+                .filter((p) => p.category === page.category)
+                .map((p) => (
+                  <div class="sidebar-row">
+                    <a
+                      href={`/${p.slug}`}
+                      style={`display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; text-decoration: none; width: 100%; color: ${p.slug === page.slug ? 'var(--clr-text)' : 'var(--clr-text-secondary)'};`}
+                    >
+                      <i
+                        class={`fa-solid ${p.icon}`}
+                        style={`width: 14px; font-size: 0.75rem; color: ${p.color};`}
+                        aria-hidden="true"
+                      />
+                      {p.title}
+                    </a>
+                  </div>
+                ))
+            }
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="sidebar-card__header">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            About this page
+          </div>
+          <div class="sidebar-card__body" style="padding: 0;">
+            <div class="sidebar-row">
+              <span class="sidebar-row__key">Tools listed</span>
+              <span class="sidebar-row__val">{page.tools.length}</span>
+            </div>
+            <div class="sidebar-row">
+              <span class="sidebar-row__key">Category</span>
+              <span class="sidebar-row__val">{page.category}</span>
+            </div>
+            <div class="sidebar-row">
+              <span class="sidebar-row__key">Criteria</span>
+              <span class="sidebar-row__val">{page.criteria.length}</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .guide-layout {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 820px) {
+    .guide-layout {
+      grid-template-columns: 1fr;
+    }
+    .guide-sidebar {
+      display: none;
+    }
+  }
+
+  .guide-sidebar {
+    top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .guide-intro {
+    font-size: 0.9375rem;
+    color: var(--clr-text-secondary);
+    line-height: 1.75;
+    border-left: 3px solid var(--clr-border-strong);
+    padding-left: 1rem;
+  }
+
+  .guide-section {
+    margin-bottom: 2rem;
+  }
+
+  .guide-section__title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--clr-text);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--clr-border);
+  }
+
+  .guide-section__title i {
+    color: var(--clr-muted);
+    font-size: 0.75rem;
+  }
+
+  .guide-criteria {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .guide-criteria__item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.625rem;
+    font-size: 0.875rem;
+    color: var(--clr-text-secondary);
+    line-height: 1.5;
+  }
+
+  .guide-criteria__item i {
+    color: var(--clr-score-high);
+    font-size: 0.625rem;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+  }
+
+  .guide-tools {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .guide-tool {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--clr-border);
+    transition: background 0.1s;
+  }
+
+  .guide-tool:last-child {
+    border-bottom: none;
+  }
+
+  .guide-tool:hover {
+    background: var(--clr-surface);
+  }
+
+  .guide-tool__header {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-tool__name {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--clr-text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex-shrink: 0;
+  }
+
+  .guide-tool__name:hover {
+    color: var(--clr-accent-hover);
+  }
+
+  .guide-tool__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .guide-tool__desc {
+    font-size: 0.8125rem;
+    color: var(--clr-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .guide-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: var(--clr-score-mid-bg);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+  }
+
+  .guide-note i {
+    color: var(--clr-score-mid);
+    font-size: 0.875rem;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .guide-note p {
+    font-size: 0.875rem;
+    color: var(--clr-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

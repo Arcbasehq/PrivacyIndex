@@ -1,0 +1,36 @@
+{
+  "slug": "searxng",
+  "name": "SearXNG",
+  "category": "search",
+  "website": "https://searxng.org",
+  "pricing": {
+    "model": "open-source",
+    "details": "Free. Self-host or use a public instance. No single entity controls all instances."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": true,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": true,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 9.5,
+    "security": 8.0,
+    "usability": 7.0
+  },
+  "tags": [
+    "open-source",
+    "self-hostable",
+    "meta-search",
+    "no-tracking",
+    "federated",
+    "aggregates-results"
+  ],
+  "lastReviewed": "2025-10-01",
+  "description": "Open-source, self-hostable meta-search engine that aggregates results from multiple sources without logging or profiling users. Privacy properties depend on the instance operator.",
+  "rationale": "SearXNG provides the strongest privacy guarantee of any search tool when self-hosted: no query data leaves your own infrastructure. When using a public instance, trust is delegated to the instance operator. No account or registration is required. Results are aggregated from multiple engines (Google, Bing, DuckDuckGo, etc.) without passing user-identifying information upstream. Usability varies by instance configuration. Recommended for technically capable users who prefer infrastructure control over convenience."
+}

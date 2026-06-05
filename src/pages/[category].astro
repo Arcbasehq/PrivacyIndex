@@ -1,0 +1,170 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CategoryIcon from '../components/CategoryIcon.astro';
+import ToolCard from '../components/ToolCard.astro';
+import { getCollection } from 'astro:content';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const categories = [
+    'vpn',
+    'browser',
+    'email',
+    'messaging',
+    'dns',
+    'os',
+    'search',
+  ] as const;
+  return categories.map((cat) => ({ params: { category: cat } }));
+}
+
+const { category } = Astro.params;
+
+const meta: Record<
+  string,
+  { label: string; description: string; color: string; bg: string }
+> = {
+  vpn: {
+    label: 'VPN Services',
+    description:
+      'Encrypted tunnel services evaluated for logging practices, jurisdiction, and audit history.',
+    color: 'var(--cat-vpn)',
+    bg: 'var(--cat-vpn-light)',
+  },
+  browser: {
+    label: 'Web Browsers',
+    description:
+      'Browser clients evaluated for default privacy settings, fingerprint resistance, and extension support.',
+    color: 'var(--cat-browser)',
+    bg: 'var(--cat-browser-light)',
+  },
+  email: {
+    label: 'Email Providers',
+    description:
+      'Email services evaluated for encryption model, data retention, account requirements, and jurisdiction.',
+    color: 'var(--cat-email)',
+    bg: 'var(--cat-email-light)',
+  },
+  messaging: {
+    label: 'Messaging Apps',
+    description:
+      'Communication tools evaluated for protocol design, metadata handling, and anonymity properties.',
+    color: 'var(--cat-messaging)',
+    bg: 'var(--cat-messaging-light)',
+  },
+  dns: {
+    label: 'DNS Resolvers',
+    description:
+      'Encrypted DNS resolvers evaluated for logging policy, operator jurisdiction, and threat blocking.',
+    color: 'var(--cat-dns)',
+    bg: 'var(--cat-dns-light)',
+  },
+  os: {
+    label: 'Operating Systems',
+    description:
+      'Desktop OS environments evaluated for default hardening, anonymity features, and auditability.',
+    color: 'var(--cat-os)',
+    bg: 'var(--cat-os-light)',
+  },
+  search: {
+    label: 'Search Engines',
+    description:
+      'Web search services evaluated for query logging, index independence, and tracking practices.',
+    color: 'var(--cat-search)',
+    bg: 'var(--cat-search-light)',
+  },
+};
+
+const allTools = await getCollection('tools');
+const tools = allTools
+  .filter((t) => t.data.category === category)
+  .sort((a, b) => b.data.scores.privacy - a.data.scores.privacy);
+
+const m = meta[category];
+const pricingModels = [...new Set(tools.map((t) => t.data.pricing.model))];
+---
+
+<Layout title={m.label} description={m.description} activeCategory={category}>
+  <div class="main-content">
+    <div class="breadcrumb">
+      <a href="/">Privacy Index</a>
+      <span class="breadcrumb__sep">/</span>
+      <span style={`color: ${m.color}; font-weight: 600;`}>{m.label}</span>
+    </div>
+
+    <!-- Page header -->
+    <div class="page-header">
+      <div class="page-header__eyebrow">
+        <span
+          style={`width: 20px; height: 20px; border-radius: 5px; background: ${m.bg}; color: ${m.color}; display: inline-flex; align-items: center; justify-content: center;`}
+        >
+          <CategoryIcon category={category} size={12} />
+        </span>
+        Category
+      </div>
+      <h1 class="page-header__title" style={`color: ${m.color}`}>{m.label}</h1>
+      <p class="page-header__desc">{m.description}</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <span class="filter-bar__label">Filter:</span>
+      <select class="filter-select" id="filter-pricing">
+        <option value="">All pricing</option>
+        {
+          pricingModels.map((p) => (
+            <option value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>
+          ))
+        }
+      </select>
+      <select class="filter-select" id="filter-oss">
+        <option value="">Open source: all</option>
+        <option value="true">Open source only</option>
+      </select>
+      <select class="filter-select" id="filter-audited">
+        <option value="">Audit: all</option>
+        <option value="true">Audited only</option>
+      </select>
+      <span class="filter-count" id="filter-count"
+        >{tools.length} tool{tools.length !== 1 ? 's' : ''}</span
+      >
+    </div>
+
+    <!-- Cards -->
+    <div id="tools-list">
+      {tools.map((tool) => <ToolCard tool={tool.data} />)}
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const list = document.getElementById('tools-list')!;
+  const cards = Array.from(list.querySelectorAll<HTMLElement>('.tool-card'));
+  const count = document.getElementById('filter-count')!;
+  const fPrice = document.getElementById('filter-pricing') as HTMLSelectElement;
+  const fOss = document.getElementById('filter-oss') as HTMLSelectElement;
+  const fAudit = document.getElementById('filter-audited') as HTMLSelectElement;
+  const fMobile = document.getElementById(
+    'filter-mobile',
+  ) as HTMLSelectElement | null;
+
+  function applyFilters() {
+    let visible = 0;
+    cards.forEach((card) => {
+      const match =
+        (!fPrice.value || card.dataset.pricing === fPrice.value) &&
+        (!fOss.value || card.dataset.oss === fOss.value) &&
+        (!fAudit.value || card.dataset.audited === fAudit.value) &&
+        (!fMobile?.value || card.dataset.mobile === fMobile.value);
+      card.dataset.hidden = match ? 'false' : 'true';
+      if (match) visible++;
+    });
+    count.textContent = `${visible} tool${visible !== 1 ? 's' : ''}`;
+  }
+
+  fPrice.addEventListener('change', applyFilters);
+  fOss.addEventListener('change', applyFilters);
+  fAudit.addEventListener('change', applyFilters);
+  fMobile?.addEventListener('change', applyFilters);
+</script>

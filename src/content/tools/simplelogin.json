@@ -1,0 +1,35 @@
+{
+  "slug": "simplelogin",
+  "name": "SimpleLogin",
+  "category": "email",
+  "website": "https://simplelogin.io",
+  "pricing": {
+    "model": "freemium",
+    "details": "Free tier: 15 aliases. Premium $30/year with unlimited aliases, custom domains, and directory."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": false,
+    "anonymousSignup": false,
+    "e2eEncrypted": false,
+    "selfHostable": true,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 8.0,
+    "security": 8.0,
+    "usability": 8.5
+  },
+  "tags": [
+    "email-alias",
+    "open-source",
+    "self-hostable",
+    "proton-acquired",
+    "pgp-support"
+  ],
+  "lastReviewed": "2025-10-01",
+  "description": "Email alias service that creates forwarding addresses, protecting the user's real email address from third-party services and enabling per-service alias management.",
+  "rationale": "SimpleLogin provides a practical mechanism for email address compartmentalization. Each alias is independently revocable, limiting data broker and spam exposure. The service is open source and self-hostable. Acquired by Proton AG in 2022, sharing infrastructure governance. PGP encryption of forwarded messages is supported. The tool addresses a different threat model than a standalone email provider — it is most effective when used alongside a private email provider."
+}

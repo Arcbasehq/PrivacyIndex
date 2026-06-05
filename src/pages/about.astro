@@ -1,0 +1,464 @@
+---
+export const prerender = true;
+
+import Layout from '../layouts/Layout.astro';
+
+const changelog = [
+  {
+    date: 'June 2026',
+    items: [
+      'Initial release with 29 tools across 7 categories',
+      'Methodology v1.0 published',
+      'VPN, Browser, Email, Messaging, DNS, OS, Search categories launched',
+    ],
+  },
+];
+---
+
+<Layout
+  title="About"
+  description="About Privacy Index — editorial standards, disclosures, and changelog."
+>
+  <div class="main-content">
+    <div class="breadcrumb">
+      <a href="/">Privacy Index</a>
+      <span class="breadcrumb__sep">/</span>
+      <span>About</span>
+    </div>
+
+    <div class="page-header">
+      <div class="page-header__eyebrow">
+        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+        About
+      </div>
+      <h1 class="page-header__title">About this index</h1>
+      <p class="page-header__desc">
+        Editorial mission, disclosure policy, and a changelog of significant
+        updates.
+      </p>
+    </div>
+
+    <div class="about-layout">
+      <div class="about-body">
+        <!-- Mission -->
+        <section class="about-section">
+          <h2 class="about-section__title">
+            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+            Mission
+          </h2>
+          <p>
+            Privacy Index exists to reduce the signal-to-noise ratio in privacy
+            software recommendations. Most resources in this space are either
+            vendor-funded aggregators, enthusiast lists with no clear evaluation
+            criteria, or fear-driven marketing content.
+          </p>
+          <p>
+            This index applies a consistent, documented methodology to each
+            tool. Scores are derived from verifiable properties — published
+            audits, disclosed policies, source code availability, and legal
+            track record — not from marketing claims or community sentiment.
+          </p>
+          <p>
+            The goal is to produce a resource useful to someone with a specific
+            threat model who needs to make an informed tool selection, not to
+            produce engagement or affiliate revenue.
+          </p>
+        </section>
+
+        <hr class="about-hr" />
+
+        <!-- Disclosures -->
+        <section class="about-section">
+          <h2 class="about-section__title">
+            <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
+            Disclosures
+          </h2>
+
+          <div class="about-disclosure-grid">
+            <div class="about-disclosure about-disclosure--clean">
+              <div class="about-disclosure__icon">
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+              </div>
+              <div>
+                <div class="about-disclosure__label">
+                  No affiliate relationships
+                </div>
+                <div class="about-disclosure__desc">
+                  No tool, vendor, or associated entity has a commercial
+                  relationship with this index. No referral links, no
+                  commission, no sponsored placements.
+                </div>
+              </div>
+            </div>
+
+            <div class="about-disclosure about-disclosure--clean">
+              <div class="about-disclosure__icon">
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+              </div>
+              <div>
+                <div class="about-disclosure__label">No advertising</div>
+                <div class="about-disclosure__desc">
+                  This site does not run advertising of any kind. No ad
+                  networks, no sponsored content, no promoted placements.
+                </div>
+              </div>
+            </div>
+
+            <div class="about-disclosure about-disclosure--clean">
+              <div class="about-disclosure__icon">
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+              </div>
+              <div>
+                <div class="about-disclosure__label">
+                  Editorial independence
+                </div>
+                <div class="about-disclosure__desc">
+                  Vendors listed here have no editorial input. Factual
+                  corrections submitted via the issue tracker are reviewed and
+                  applied on merit.
+                </div>
+              </div>
+            </div>
+
+            <div class="about-disclosure about-disclosure--clean">
+              <div class="about-disclosure__icon">
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+              </div>
+              <div>
+                <div class="about-disclosure__label">Open methodology</div>
+                <div class="about-disclosure__desc">
+                  Scoring criteria are fully documented and publicly available.
+                  See the <a href="/methodology">Methodology</a> page for the complete
+                  rubric.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <hr class="about-hr" />
+
+        <!-- Scope -->
+        <section class="about-section">
+          <h2 class="about-section__title">
+            <i class="fa-solid fa-compass" aria-hidden="true"></i>
+            Scope and limitations
+          </h2>
+          <p>
+            This index covers consumer and prosumer privacy tools in seven
+            categories. It does not cover enterprise security products, hardware
+            solutions, operating system hardening guides, or network
+            infrastructure tools beyond DNS resolvers.
+          </p>
+          <p>
+            Scores reflect the state of each tool at the time of the most recent
+            review. Privacy and security properties can change — through policy
+            updates, acquisitions, discovered vulnerabilities, or legal
+            proceedings. The <strong>Last reviewed</strong> date on each tool page
+            indicates when the assessment was last substantively updated.
+          </p>
+          <p>
+            No score is permanent. A tool that scores 9.0 today may score lower
+            following a policy change or adverse legal event. Conversely, a tool
+            with a current low score may improve through audits, open-sourcing,
+            or jurisdictional changes.
+          </p>
+        </section>
+
+        <hr class="about-hr" />
+
+        <!-- Changelog -->
+        <section class="about-section">
+          <h2 class="about-section__title">
+            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+            Changelog
+          </h2>
+          <p style="margin-bottom: 1.5rem;">
+            Significant additions, score changes, and editorial updates. Minor
+            corrections (typos, formatting) are not logged.
+          </p>
+
+          <div class="changelog">
+            {
+              changelog.map((entry) => (
+                <div class="changelog__entry">
+                  <div class="changelog__date">
+                    <i class="fa-solid fa-calendar-days" aria-hidden="true" />
+                    {entry.date}
+                  </div>
+                  <ul class="changelog__list">
+                    {entry.items.map((item) => (
+                      <li class="changelog__item">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            }
+          </div>
+        </section>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="about-sidebar">
+        <div class="sidebar-card">
+          <div class="sidebar-card__header">
+            <i class="fa-solid fa-link" aria-hidden="true"></i>
+            Quick links
+          </div>
+          <div class="sidebar-card__body" style="padding: 0;">
+            {
+              [
+                { href: '/', icon: 'fa-grip', label: 'Overview' },
+                {
+                  href: '/methodology',
+                  icon: 'fa-book-open',
+                  label: 'Methodology',
+                },
+                {
+                  href: '/vpn',
+                  icon: 'fa-shield-halved',
+                  label: 'VPN Services',
+                },
+                { href: '/browser', icon: 'fa-globe', label: 'Web Browsers' },
+                {
+                  href: '/email',
+                  icon: 'fa-envelope',
+                  label: 'Email Providers',
+                },
+                {
+                  href: '/messaging',
+                  icon: 'fa-comments',
+                  label: 'Messaging Apps',
+                },
+                { href: '/dns', icon: 'fa-server', label: 'DNS Resolvers' },
+                {
+                  href: '/os',
+                  icon: 'fa-laptop-code',
+                  label: 'Operating Systems',
+                },
+                {
+                  href: '/search',
+                  icon: 'fa-magnifying-glass',
+                  label: 'Search Engines',
+                },
+              ].map((link) => (
+                <div class="sidebar-row">
+                  <a
+                    href={link.href}
+                    style="display: flex; align-items: center; gap: 0.5rem; color: var(--clr-text-secondary); font-size: 0.8125rem; text-decoration: none; width: 100%;"
+                  >
+                    <i
+                      class={`fa-solid ${link.icon}`}
+                      style="width: 14px; color: var(--clr-muted); font-size: 0.75rem;"
+                      aria-hidden="true"
+                    />
+                    {link.label}
+                  </a>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="sidebar-card__header">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            Index stats
+          </div>
+          <div class="sidebar-card__body" style="padding: 0;">
+            <div class="sidebar-row">
+              <span class="sidebar-row__key">Tools listed</span>
+              <span class="sidebar-row__val">29</span>
+            </div>
+            <div class="sidebar-row">
+              <span class="sidebar-row__key">Categories</span>
+              <span class="sidebar-row__val">7</span>
+            </div>
+            <div class="sidebar-row">
+              <span class="sidebar-row__key">Last reviewed</span>
+              <span class="sidebar-row__val">Jun 2026</span>
+            </div>
+            <div class="sidebar-row">
+              <span class="sidebar-row__key">Version</span>
+              <span
+                class="sidebar-row__val"
+                style="font-family: var(--font-mono); font-size: 0.75rem;"
+                >v0.1.0 BETA</span
+              >
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 3rem;
+    align-items: start;
+    padding-block: 0.5rem;
+  }
+
+  @media (max-width: 820px) {
+    .about-layout {
+      grid-template-columns: 1fr;
+    }
+    .about-sidebar {
+      display: none;
+    }
+  }
+
+  .about-body {
+    min-width: 0;
+  }
+
+  .about-sidebar {
+    position: static;
+  }
+
+  .about-section {
+    margin-bottom: 0.5rem;
+  }
+
+  .about-section p {
+    font-size: 0.9375rem;
+    color: var(--clr-text-secondary);
+    line-height: 1.75;
+    margin-bottom: 1rem;
+  }
+
+  .about-section__title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--clr-text);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    letter-spacing: -0.015em;
+  }
+
+  .about-section__title i {
+    color: var(--clr-muted);
+    font-size: 0.875rem;
+  }
+
+  .about-hr {
+    border: none;
+    border-top: 1px solid var(--clr-border);
+    margin-block: 2rem;
+  }
+
+  /* Disclosures */
+  .about-disclosure-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .about-disclosure {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: var(--radius);
+    border: 1px solid;
+  }
+
+  .about-disclosure--clean {
+    background: var(--clr-score-high-bg);
+    border-color: rgba(74, 222, 128, 0.15);
+  }
+
+  .about-disclosure__icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(74, 222, 128, 0.2);
+    color: var(--clr-score-high);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .about-disclosure__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--clr-text);
+    margin-bottom: 0.25rem;
+  }
+
+  .about-disclosure__desc {
+    font-size: 0.8125rem;
+    color: var(--clr-text-secondary);
+    line-height: 1.55;
+  }
+
+  /* Changelog */
+  .changelog {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .changelog__entry {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--clr-border);
+  }
+
+  .changelog__entry:last-child {
+    border-bottom: none;
+  }
+
+  .changelog__date {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--clr-text);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .changelog__date i {
+    color: var(--clr-muted);
+    font-size: 0.75rem;
+  }
+
+  .changelog__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .changelog__item {
+    font-size: 0.875rem;
+    color: var(--clr-text-secondary);
+    padding-left: 1.25rem;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .changelog__item::before {
+    content: '';
+    position: absolute;
+    left: 0.375rem;
+    top: 0.6em;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--clr-muted-light);
+  }
+</style>

@@ -1,0 +1,37 @@
+{
+  "slug": "fedora",
+  "name": "Fedora Linux",
+  "category": "os",
+  "website": "https://fedoraproject.org",
+  "pricing": {
+    "model": "free",
+    "details": "Free and open source. Backed by Red Hat."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": false,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": false,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 6.5,
+    "security": 7.5,
+    "usability": 8.5
+  },
+  "tags": [
+    "open-source",
+    "selinux",
+    "dnf",
+    "rpm",
+    "cutting-edge",
+    "systemd",
+    "wayland"
+  ],
+  "lastReviewed": "2025-11-01",
+  "description": "General-purpose Linux distribution with strong security defaults including SELinux enforcing mode, frequent package updates, and Wayland as the default display server.",
+  "rationale": "Fedora is evaluated here as the reference mainstream Linux distribution for privacy-conscious users who need a practical daily driver. It ships with SELinux in enforcing mode, uses Wayland by default, and includes no proprietary telemetry. It is not privacy-hardened and does not route traffic anonymously. For users migrating from Windows or macOS, Fedora provides a substantial privacy improvement with comparable usability. Not suitable as a substitute for Tails or Qubes in high-risk contexts."
+}

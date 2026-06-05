@@ -1,0 +1,36 @@
+{
+  "slug": "adguarddns",
+  "name": "AdGuard DNS",
+  "category": "dns",
+  "website": "https://adguard-dns.io",
+  "pricing": {
+    "model": "freemium",
+    "details": "Free public resolvers. Personal plan $2.99/month for custom blocklists and device management."
+  },
+  "attributes": {
+    "openSource": false,
+    "auditedThirdParty": false,
+    "noLogsPolicy": false,
+    "anonymousSignup": false,
+    "e2eEncrypted": true,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 7.0,
+    "security": 8.0,
+    "usability": 8.0
+  },
+  "tags": [
+    "dns-over-https",
+    "dns-over-tls",
+    "dns-over-quic",
+    "ad-blocking",
+    "tracker-blocking",
+    "configurable"
+  ],
+  "lastReviewed": "2025-09-01",
+  "description": "Public and configurable encrypted DNS resolver from AdGuard with default ad and tracker blocking. Operated by a commercial company incorporated in Cyprus.",
+  "rationale": "AdGuard DNS provides ad and tracker blocking at the DNS layer without requiring device-level software installation. Supports DoH, DoT, and DoQ. The free public resolver does not require an account. However, the company is commercial and has had prior incidents involving analytics data handling. Logs policy is less clear than Quad9 or Mullvad. Recommended for users seeking easy ad-blocking DNS; not the first choice for strict privacy use cases."
+}

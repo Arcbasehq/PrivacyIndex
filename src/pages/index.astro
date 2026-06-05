@@ -1,0 +1,260 @@
+---
+export const prerender = true;
+
+import Layout from '../layouts/Layout.astro';
+import CategoryIcon from '../components/CategoryIcon.astro';
+import ToolCard from '../components/ToolCard.astro';
+import ToolLogo from '../components/ToolLogo.astro';
+import { getCollection } from 'astro:content';
+
+const allTools = await getCollection('tools');
+
+const categories = [
+  {
+    slug: 'vpn',
+    label: 'VPN Services',
+    color: 'var(--cat-vpn)',
+    bg: 'var(--cat-vpn-light)',
+  },
+  {
+    slug: 'browser',
+    label: 'Web Browsers',
+    color: 'var(--cat-browser)',
+    bg: 'var(--cat-browser-light)',
+  },
+  {
+    slug: 'email',
+    label: 'Email Providers',
+    color: 'var(--cat-email)',
+    bg: 'var(--cat-email-light)',
+  },
+  {
+    slug: 'messaging',
+    label: 'Messaging Apps',
+    color: 'var(--cat-messaging)',
+    bg: 'var(--cat-messaging-light)',
+  },
+  {
+    slug: 'dns',
+    label: 'DNS Resolvers',
+    color: 'var(--cat-dns)',
+    bg: 'var(--cat-dns-light)',
+  },
+  {
+    slug: 'os',
+    label: 'Operating Systems',
+    color: 'var(--cat-os)',
+    bg: 'var(--cat-os-light)',
+  },
+  {
+    slug: 'search',
+    label: 'Search Engines',
+    color: 'var(--cat-search)',
+    bg: 'var(--cat-search-light)',
+  },
+];
+
+// Top tool per category by privacy score
+const topByCat = categories.map((cat) => ({
+  ...cat,
+  tools: allTools
+    .filter((t) => t.data.category === cat.slug)
+    .sort((a, b) => b.data.scores.privacy - a.data.scores.privacy)
+    .slice(0, 2),
+}));
+
+// Global top picks — highest combined privacy+security, one per category
+const featuredTools = categories
+  .map(
+    (cat) =>
+      allTools
+        .filter((t) => t.data.category === cat.slug)
+        .sort(
+          (a, b) =>
+            b.data.scores.privacy +
+            b.data.scores.security -
+            (a.data.scores.privacy + a.data.scores.security),
+        )[0],
+  )
+  .filter(Boolean);
+
+const totalTools = allTools.length;
+const totalAudited = allTools.filter(
+  (t) => t.data.attributes.auditedThirdParty,
+).length;
+const totalOss = allTools.filter((t) => t.data.attributes.openSource).length;
+const totalFree = allTools.filter((t) =>
+  ['free', 'open-source'].includes(t.data.pricing.model),
+).length;
+
+function scoreClass(n: number) {
+  if (n >= 8) return 'score--high';
+  if (n >= 6) return 'score--mid';
+  return 'score--low';
+}
+---
+
+<Layout title="Privacy Index">
+  <div class="main-content">
+    <!-- Hero -->
+    <section class="hero">
+      <h1 class="hero__title">Privacy &amp; Security Software Reference</h1>
+      <p class="hero__subtitle">
+        A curated directory of evaluated privacy tools across {
+          categories.length
+        } categories. Scored on measurable, publicly verifiable criteria — no affiliate
+        links, no sponsored placements.
+      </p>
+      <div class="hero__stats">
+        <span class="hero__stat"
+          ><strong>{totalTools}</strong> tools evaluated</span
+        >
+        <span class="hero__stat"><strong>{totalOss}</strong> open source</span>
+        <span class="hero__stat"
+          ><strong>{totalAudited}</strong> independently audited</span
+        >
+        <span class="hero__stat"
+          ><strong>{totalFree}</strong> free / open-source pricing</span
+        >
+      </div>
+    </section>
+
+    <!-- Top picks strip -->
+    <section style="margin-bottom: 2.5rem;">
+      <p
+        class="section-heading"
+        style="font-size: 0.625rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--clr-muted); margin-bottom: 0.875rem; padding-bottom: 0.625rem; border-bottom: 1px solid var(--clr-border);"
+      >
+        Highest rated by privacy score
+      </p>
+      <div class="top-picks-strip">
+        {
+          featuredTools.map(
+            (tool) =>
+              tool && (
+                <a href={`/tool/${tool.data.slug}`} class="top-pick-chip">
+                  <div class="top-pick-chip__logo">
+                    <ToolLogo
+                      slug={tool.data.slug}
+                      name={tool.data.name}
+                      category={tool.data.category}
+                      size={16}
+                    />
+                  </div>
+                  <div class="top-pick-chip__info">
+                    <div class="top-pick-chip__name">{tool.data.name}</div>
+                    <div class="top-pick-chip__cat">{tool.data.category}</div>
+                  </div>
+                  <span
+                    class={`score ${scoreClass(tool.data.scores.privacy)}`}
+                    style="font-size: 0.6875rem; padding: 0.1rem 0.375rem;"
+                  >
+                    {tool.data.scores.privacy.toFixed(1)}
+                  </span>
+                </a>
+              ),
+          )
+        }
+      </div>
+    </section>
+
+    <!-- Per-category top 2 -->
+    {
+      topByCat.map((cat) => (
+        <section class="cat-section">
+          <div class="cat-section__header">
+            <div class="cat-section__title">
+              <div
+                class="cat-section__icon"
+                style={`background: ${cat.bg}; color: ${cat.color};`}
+              >
+                <CategoryIcon category={cat.slug} size={14} />
+              </div>
+              {cat.label}
+            </div>
+            <a href={`/${cat.slug}`} class="cat-section__link">
+              See all{' '}
+              <i
+                class="fa-solid fa-arrow-right"
+                style="font-size: 0.625rem;"
+                aria-hidden="true"
+              />
+            </a>
+          </div>
+          {cat.tools.map((tool) => (
+            <ToolCard tool={tool.data} />
+          ))}
+        </section>
+      ))
+    }
+  </div>
+</Layout>
+
+<style>
+  .section-heading {
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--clr-muted);
+    margin-bottom: 0.875rem;
+    padding-bottom: 0.625rem;
+    border-bottom: 1px solid var(--clr-border);
+  }
+
+  /* Top picks strip */
+  .top-picks-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .top-pick-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.625rem 0.375rem 0.375rem;
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-radius: 20px;
+    text-decoration: none;
+    transition:
+      border-color 0.1s,
+      background 0.1s;
+  }
+  .top-pick-chip:hover {
+    border-color: var(--clr-border-strong);
+    background: var(--clr-surface-alt);
+  }
+
+  .top-pick-chip__logo {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .top-pick-chip__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .top-pick-chip__name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--clr-text);
+    line-height: 1.2;
+  }
+
+  .top-pick-chip__cat {
+    font-size: 0.5625rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--clr-muted);
+  }
+</style>

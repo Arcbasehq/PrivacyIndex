@@ -1,0 +1,36 @@
+{
+  "slug": "signal",
+  "name": "Signal",
+  "category": "messaging",
+  "website": "https://signal.org",
+  "pricing": {
+    "model": "free",
+    "details": "Free. Non-profit foundation. Donations accepted."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": true,
+    "noLogsPolicy": true,
+    "anonymousSignup": false,
+    "e2eEncrypted": true,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 9.0,
+    "security": 9.5,
+    "usability": 9.0
+  },
+  "tags": [
+    "signal-protocol",
+    "end-to-end-encryption",
+    "open-source",
+    "audited",
+    "disappearing-messages",
+    "sealed-sender"
+  ],
+  "lastReviewed": "2025-11-01",
+  "description": "End-to-end encrypted messaging application developed by the Signal Foundation. The Signal Protocol has become the industry reference implementation for secure messaging.",
+  "rationale": "Signal's protocol is the most extensively peer-reviewed and audited secure messaging implementation available. Metadata protection features (sealed sender, minimal data retention) are above average for consumer messaging. The organization has a strong legal track record of disclosing minimal data in response to subpoenas. Phone number requirement for signup is the primary privacy limitation. Not self-hostable."
+}

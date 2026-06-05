@@ -1,0 +1,36 @@
+{
+  "slug": "element",
+  "name": "Element (Matrix)",
+  "category": "messaging",
+  "website": "https://element.io",
+  "pricing": {
+    "model": "freemium",
+    "details": "Free on matrix.org homeserver. Element One subscription $5/month for managed homeserver. Self-hosting is free."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": true,
+    "noLogsPolicy": false,
+    "anonymousSignup": true,
+    "e2eEncrypted": true,
+    "selfHostable": true,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 8.0,
+    "security": 8.0,
+    "usability": 7.0
+  },
+  "tags": [
+    "matrix-protocol",
+    "decentralized",
+    "open-source",
+    "self-hostable",
+    "federated",
+    "end-to-end-encryption"
+  ],
+  "lastReviewed": "2025-10-01",
+  "description": "Client for the Matrix open federated messaging protocol. Supports end-to-end encryption via the Megolm protocol. Privacy properties depend heavily on server selection or self-hosting.",
+  "rationale": "Matrix's decentralized, federated architecture eliminates single points of control over communications. Running a private homeserver provides complete data sovereignty. E2E encryption is available but not enabled by default in all room types. Cross-signing for device verification adds complexity. The usability of key management is below Signal. When self-hosted, Matrix provides strong privacy guarantees; on the default matrix.org server, user metadata is retained."
+}

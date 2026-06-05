@@ -1,0 +1,36 @@
+{
+  "slug": "protonmail",
+  "name": "Proton Mail",
+  "category": "email",
+  "website": "https://proton.me/mail",
+  "pricing": {
+    "model": "freemium",
+    "details": "Free tier: 1 address, 500MB storage. Paid plans from $3.99/month with custom domains and more storage."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": true,
+    "noLogsPolicy": false,
+    "anonymousSignup": false,
+    "e2eEncrypted": true,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 8.5,
+    "security": 9.0,
+    "usability": 8.5
+  },
+  "tags": [
+    "end-to-end-encryption",
+    "pgp",
+    "open-source",
+    "audited",
+    "swiss-jurisdiction",
+    "zero-access"
+  ],
+  "lastReviewed": "2025-11-01",
+  "description": "End-to-end encrypted email service hosted in Switzerland under Swiss privacy law. Web client is open source. Supports PGP interoperability with external contacts.",
+  "rationale": "Proton Mail encrypts message content and attachments end-to-end between Proton users. Subject lines and metadata are not E2E encrypted. The Swiss legal framework provides stronger protections than EU/US equivalents for account data. IP address logging has occurred in response to legal orders, which is a documented limitation. Free tier is functional. Client applications are open source and have been audited."
+}

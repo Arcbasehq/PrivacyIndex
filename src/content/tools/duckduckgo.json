@@ -1,0 +1,35 @@
+{
+  "slug": "duckduckgo",
+  "name": "DuckDuckGo",
+  "category": "search",
+  "website": "https://duckduckgo.com",
+  "pricing": {
+    "model": "free",
+    "details": "Free, ad-supported with non-tracking contextual ads."
+  },
+  "attributes": {
+    "openSource": false,
+    "auditedThirdParty": false,
+    "noLogsPolicy": false,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 7.5,
+    "security": 7.0,
+    "usability": 8.5
+  },
+  "tags": [
+    "no-tracking",
+    "bing-based",
+    "bang-shortcuts",
+    "onion-site",
+    "anonymous-search"
+  ],
+  "lastReviewed": "2025-11-01",
+  "description": "Privacy-oriented search engine that does not create user profiles or track search history. Results are primarily sourced from Bing with supplementary crawling.",
+  "rationale": "DuckDuckGo is the most widely adopted alternative to Google search. It does not create user profiles or share searches with advertisers. Results depend on Bing's index, which limits independence. The 2022 Microsoft tracking exception controversy highlighted the gap between marketing claims and actual data agreements. A Tor onion site is available. For users wanting improved privacy over Google with no usability reduction, DuckDuckGo is the most accessible entry point."
+}

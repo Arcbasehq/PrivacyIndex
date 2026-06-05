@@ -1,0 +1,35 @@
+{
+  "slug": "bravesearch",
+  "name": "Brave Search",
+  "category": "search",
+  "website": "https://search.brave.com",
+  "pricing": {
+    "model": "freemium",
+    "details": "Free with ads. Premium $3/month for ad-free results and AI summarization."
+  },
+  "attributes": {
+    "openSource": false,
+    "auditedThirdParty": false,
+    "noLogsPolicy": false,
+    "anonymousSignup": true,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 8.0,
+    "security": 7.5,
+    "usability": 8.5
+  },
+  "tags": [
+    "independent-index",
+    "no-google",
+    "no-bing",
+    "anonymous-search",
+    "goggles"
+  ],
+  "lastReviewed": "2025-11-01",
+  "description": "Search engine with an independent web index, not reliant on Google or Bing results. Operates without user tracking or personalization by default.",
+  "rationale": "Brave Search is notable for having built its own independent web index, unlike DuckDuckGo and Startpage which rely on Bing/Google results. No user profiles are built. The 'Goggles' feature allows custom re-ranking rules. Search quality for long-tail queries is improving but still below Google's level. Default anonymous search mode does not require an account."
+}

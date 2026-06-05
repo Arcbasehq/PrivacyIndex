@@ -1,0 +1,28 @@
+{
+  "slug": "libresearch",
+  "name": "LibreSearch",
+  "category": "search",
+  "website": "https://libresearch.ca",
+  "pricing": {
+    "model": "free",
+    "details": "Free and open source. Paid features are coming in future updates."
+  },
+  "attributes": {
+    "openSource": true,
+    "auditedThirdParty": false,
+    "noLogsPolicy": true,
+    "anonymousSignup": false,
+    "e2eEncrypted": false,
+    "selfHostable": false,
+    "mobileSupport": true,
+    "desktopSupport": true
+  },
+  "scores": {
+    "privacy": 8.5,
+    "security": 7.5,
+    "usability": 8.5
+  },
+  "tags": ["independent-index", "no-google", "no-bing", "anonymous-search"],
+  "lastReviewed": "2025-11-01",
+  "description": "Search engine with an independent web index, not reliant on Google or Bing results. Operates without user tracking or personalization by default."
+}
